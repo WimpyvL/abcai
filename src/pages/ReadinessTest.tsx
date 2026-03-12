@@ -1,230 +1,175 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { CheckCircle2, ArrowRight, ClipboardCheck, BarChart3, Lightbulb, FileText, Zap, Shield, Users, Download } from 'lucide-react';
+import React from 'react';
+import { motion } from 'motion/react';
+import { Helmet } from 'react-helmet-async';
+import { ArrowRight, CheckCircle2, RotateCcw } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { ContinueJourney, JourneyCompass } from '../components/Journey';
+import { READINESS_BANDS, READINESS_QUESTIONS } from '../constants';
+
+const totalPossibleScore = READINESS_QUESTIONS.length * 3;
 
 export const ReadinessTest = () => {
-  const [step, setStep] = useState(0);
-  const [showReport, setShowReport] = useState(false);
+  const [currentStep, setCurrentStep] = React.useState(0);
+  const [answers, setAnswers] = React.useState<number[]>([]);
 
-  const questions = [
-    {
-      id: 1,
-      question: "How would you describe your current data organization?",
-      options: [
-        "We have no centralized data storage.",
-        "Data is in various spreadsheets and silos.",
-        "We have a centralized database but limited access.",
-        "We have a clean, accessible data warehouse."
-      ]
-    },
-    {
-      id: 2,
-      question: "What is the general level of AI literacy in your team?",
-      options: [
-        "Most don't know what ChatGPT is.",
-        "Some use AI tools personally but not for work.",
-        "We have a few 'power users' experimenting.",
-        "AI is integrated into our daily workflows."
-      ]
-    },
-    {
-      id: 3,
-      question: "What is your primary goal for implementing AI?",
-      options: [
-        "Just curious/FOMO.",
-        "Automating repetitive tasks.",
-        "Improving customer experience.",
-        "Developing new AI-powered products."
-      ]
+  const isComplete = answers.length === READINESS_QUESTIONS.length;
+  const rawScore = answers.reduce((sum, value) => sum + value, 0);
+  const percentage = Math.round((rawScore / totalPossibleScore) * 100);
+  const band =
+    READINESS_BANDS.find((item) => percentage >= item.min && percentage <= item.max) ?? READINESS_BANDS[0];
+
+  const handleSelect = (score: number) => {
+    const nextAnswers = [...answers];
+    nextAnswers[currentStep] = score;
+    setAnswers(nextAnswers);
+
+    if (currentStep < READINESS_QUESTIONS.length - 1) {
+      setCurrentStep((value) => value + 1);
     }
-  ];
+  };
 
-  const ReportView = () => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="space-y-12"
-    >
-      <div className="border-b border-[#141414]/10 pb-8">
-        <h2 className="text-4xl font-bold text-[#141414] mb-4">AI Strategy Report</h2>
-        <p className="text-[#141414]/60">Generated for your business on {new Date().toLocaleDateString()}</p>
-      </div>
+  const reset = () => {
+    setAnswers([]);
+    setCurrentStep(0);
+  };
 
-      {/* Executive Summary */}
-      <section>
-        <h3 className="text-xl font-bold mb-6 flex items-center">
-          <Zap className="mr-2 text-[#F27D26]" size={20} />
-          Executive Summary
-        </h3>
-        <div className="bg-[#F27D26]/5 p-8 rounded-3xl border border-[#F27D26]/10">
-          <p className="text-[#141414]/80 leading-relaxed">
-            Your business shows strong potential for AI integration, particularly in operational efficiency. While your data is currently siloed, the clarity of your goals provides a solid foundation for a phased rollout. We recommend focusing on "Low-Hanging Fruit" automation before attempting complex model training.
-          </p>
-        </div>
-      </section>
-
-      {/* Pillar Analysis */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="p-8 border border-[#141414]/5 rounded-3xl bg-white">
-          <Shield className="text-[#F27D26] mb-4" />
-          <h4 className="font-bold mb-2">Data Governance</h4>
-          <p className="text-sm text-[#141414]/60 mb-4">Current Status: <span className="text-orange-600 font-bold">Action Required</span></p>
-          <p className="text-sm text-[#141414]/70">Your data is fragmented. Priority #1 is creating a "Single Source of Truth" to prevent AI hallucinations and ensure consistent outputs.</p>
-        </div>
-        <div className="p-8 border border-[#141414]/5 rounded-3xl bg-white">
-          <Users className="text-[#F27D26] mb-4" />
-          <h4 className="font-bold mb-2">Team Readiness</h4>
-          <p className="text-sm text-[#141414]/60 mb-4">Current Status: <span className="text-green-600 font-bold">Emerging</span></p>
-          <p className="text-sm text-[#141414]/70">There is high interest but low structured skill. Internal "AI Champions" should be identified to lead peer-to-peer training sessions.</p>
-        </div>
-      </div>
-
-      {/* Recommended Tool Stack */}
-      <section>
-        <h3 className="text-xl font-bold mb-6">Recommended Tool Stack (ZA Context)</h3>
-        <div className="space-y-4">
-          {[
-            { name: 'Claude 3.5 Sonnet', use: 'Advanced reasoning & coding tasks', cost: 'R400/mo' },
-            { name: 'Make.com', use: 'Workflow automation & integration', cost: 'Free tier available' },
-            { name: 'Perplexity', use: 'Research & real-time local data', cost: 'Free' },
-          ].map((tool) => (
-            <div key={tool.name} className="flex items-center justify-between p-6 bg-[#E4E3E0]/20 rounded-2xl">
-              <div>
-                <h5 className="font-bold text-[#141414]">{tool.name}</h5>
-                <p className="text-xs text-[#141414]/60">{tool.use}</p>
-              </div>
-              <span className="text-xs font-mono font-bold text-[#F27D26]">{tool.cost}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Roadmap */}
-      <section className="bg-[#141414] text-[#E4E3E0] p-10 rounded-[2.5rem]">
-        <h3 className="text-xl font-bold mb-8">90-Day Implementation Roadmap</h3>
-        <div className="space-y-8">
-          {[
-            { phase: 'Month 1', task: 'Data Audit & Tool Sandbox setup' },
-            { phase: 'Month 2', task: 'Pilot: Automate Customer Support FAQs' },
-            { phase: 'Month 3', task: 'Company-wide Prompt Engineering Workshop' },
-          ].map((item, idx) => (
-            <div key={idx} className="flex gap-6">
-              <span className="font-mono text-[#F27D26] font-bold">{item.phase}</span>
-              <p className="text-[#E4E3E0]/70">{item.task}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <div className="flex justify-center pt-8">
-        <button 
-          onClick={() => window.print()}
-          className="flex items-center bg-[#141414] text-white px-8 py-4 rounded-full font-bold hover:bg-[#F27D26] transition-colors"
-        >
-          <Download className="mr-2" size={20} />
-          Export as PDF
-        </button>
-      </div>
-    </motion.div>
-  );
+  const currentQuestion = READINESS_QUESTIONS[currentStep];
+  const progress = ((Math.min(answers.length, READINESS_QUESTIONS.length)) / READINESS_QUESTIONS.length) * 100;
 
   return (
-    <div className="pt-24 pb-24 min-h-screen bg-[#E4E3E0]/30">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <header className="mb-12 text-center">
-          <span className="font-mono text-xs uppercase tracking-widest text-[#F27D26] mb-4 block">Diagnostic Tool</span>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tighter text-[#141414] mb-4">AI Readiness Test</h1>
-          <p className="text-[#141414]/60">Discover how prepared your business is for the AI revolution.</p>
+    <div className="px-4 pb-20 pt-28 sm:px-6 lg:px-8">
+      <Helmet>
+        <title>AI readiness test | ABCAI</title>
+        <meta
+          name="description"
+          content="Check how ready your business or team is for practical AI adoption with ABCAI's AI readiness test."
+        />
+      </Helmet>
+
+      <div className="mx-auto max-w-5xl">
+        <JourneyCompass page="readiness" />
+
+        <header className="text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-strong)]">
+            Readiness test
+          </p>
+          <h1 className="mt-2 text-5xl font-semibold tracking-[-0.06em] sm:text-6xl">How ready are you for useful AI?</h1>
+          <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-[color:var(--muted)]">
+            This diagnostic is simple on purpose. It checks clarity, workflow maturity, data quality, team readiness,
+            and risk awareness so you know whether to start with training, pilots, or more serious implementation.
+          </p>
         </header>
 
-        <div className="bg-white rounded-[2rem] p-8 md:p-12 shadow-xl border border-[#141414]/5">
-          <AnimatePresence mode="wait">
-            {!showReport ? (
-              step < questions.length ? (
-                <motion.div
-                  key="questions"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                >
-                  <div className="flex items-center justify-between mb-8">
-                    <span className="font-mono text-xs text-[#141414]/40">QUESTION {step + 1} OF {questions.length}</span>
-                    <div className="h-1 w-32 bg-[#141414]/5 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-[#F27D26] transition-all duration-500" 
-                        style={{ width: `${((step + 1) / questions.length) * 100}%` }}
-                      />
-                    </div>
+        <div className="mt-12 rounded-[2.5rem] border border-[color:var(--line)] bg-white p-6 shadow-[0_24px_80px_rgba(23,33,39,0.08)] sm:p-8 lg:p-10">
+          {!isComplete ? (
+            <motion.div key={currentQuestion.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-strong)]">
+                    Question {currentStep + 1} of {READINESS_QUESTIONS.length}
+                  </p>
+                  <h2 className="mt-2 text-3xl font-semibold tracking-[-0.05em]">{currentQuestion.question}</h2>
+                </div>
+                <div className="w-full max-w-xs">
+                  <div className="h-2 rounded-full bg-[color:var(--surface-strong)]">
+                    <div
+                      className="h-full rounded-full bg-[color:var(--accent)] transition-all duration-300"
+                      style={{ width: `${progress}%` }}
+                    />
                   </div>
+                  <p className="mt-2 text-right text-xs font-medium uppercase tracking-[0.16em] text-[color:var(--muted)]">
+                    {Math.round(progress)}% complete
+                  </p>
+                </div>
+              </div>
 
-                  <h2 className="text-2xl font-bold text-[#141414] mb-8">{questions[step].question}</h2>
-                  
-                  <div className="space-y-4">
-                    {questions[step].options.map((option, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setStep(step + 1)}
-                        className="w-full text-left p-6 rounded-xl border border-[#141414]/10 hover:border-[#F27D26] hover:bg-[#F27D26]/5 transition-all group flex items-center justify-between"
-                      >
-                        <span className="font-medium text-[#141414]">{option}</span>
-                        <ArrowRight size={18} className="text-[#141414]/20 group-hover:text-[#F27D26] group-hover:translate-x-1 transition-all" />
-                      </button>
+              <div className="mt-8 space-y-4">
+                {currentQuestion.options.map((option) => (
+                  <button
+                    key={option.label}
+                    type="button"
+                    onClick={() => handleSelect(option.score)}
+                    className="w-full rounded-[1.6rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-5 text-left hover:border-[color:var(--accent)] hover:bg-[color:var(--accent-soft)]"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="text-base font-semibold text-[color:var(--ink)]">{option.label}</p>
+                        <p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">{option.note}</p>
+                      </div>
+                      <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-[color:var(--accent-strong)]" />
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+              <div className="rounded-[2rem] bg-[color:var(--ink)] p-6 text-[color:var(--paper)] sm:p-8">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:rgba(248,244,238,0.5)]">
+                  Your result
+                </p>
+                <div className="mt-4 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                  <div>
+                    <h2 className="text-4xl font-semibold tracking-[-0.05em]">{band.name}</h2>
+                    <p className="mt-3 max-w-2xl text-sm leading-7 text-[color:rgba(248,244,238,0.82)]">{band.summary}</p>
+                  </div>
+                  <div className="rounded-[1.8rem] border border-white/10 bg-white/5 px-6 py-4">
+                    <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:rgba(248,244,238,0.48)]">
+                      Readiness score
+                    </div>
+                    <div className="mt-2 text-4xl font-semibold tracking-[-0.05em]">{percentage}%</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+                <div className="rounded-[2rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-6">
+                  <h3 className="text-2xl font-semibold tracking-[-0.04em]">Top priorities</h3>
+                  <div className="mt-6 space-y-3">
+                    {band.priorities.map((priority) => (
+                      <div key={priority} className="flex items-start gap-3 rounded-2xl bg-white p-4">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--accent)]" />
+                        <span className="text-sm leading-6 text-[color:var(--ink)]/82">{priority}</span>
+                      </div>
                     ))}
                   </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="summary"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-8"
-                >
-                  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-green-600 mx-auto mb-8">
-                    <CheckCircle2 size={40} />
-                  </div>
-                  <h2 className="text-3xl font-bold text-[#141414] mb-4">Analysis Complete</h2>
-                  <p className="text-[#141414]/60 mb-12 max-w-md mx-auto">
-                    Based on your answers, your business has a **Moderate Readiness Score (64/100)**. Your personalized report is ready.
-                  </p>
+                </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 text-left">
-                    <div className="p-6 bg-[#E4E3E0]/30 rounded-2xl">
-                      <ClipboardCheck className="text-[#F27D26] mb-4" />
-                      <h4 className="font-bold text-sm mb-2">Data Health</h4>
-                      <p className="text-xs text-[#141414]/60">Needs centralization before scaling.</p>
-                    </div>
-                    <div className="p-6 bg-[#E4E3E0]/30 rounded-2xl">
-                      <BarChart3 className="text-[#F27D26] mb-4" />
-                      <h4 className="font-bold text-sm mb-2">ROI Potential</h4>
-                      <p className="text-xs text-[#141414]/60">High in Customer Support automation.</p>
-                    </div>
-                    <div className="p-6 bg-[#E4E3E0]/30 rounded-2xl">
-                      <Lightbulb className="text-[#F27D26] mb-4" />
-                      <h4 className="font-bold text-sm mb-2">Next Step</h4>
-                      <p className="text-xs text-[#141414]/60">Upskill core team on Prompt Engineering.</p>
-                    </div>
-                  </div>
+                <div className="rounded-[2rem] border border-[color:var(--line)] bg-white p-6">
+                  <h3 className="text-2xl font-semibold tracking-[-0.04em]">Recommended next move</h3>
+                  <p className="mt-4 text-sm leading-7 text-[color:var(--muted)]">{band.recommendation}</p>
 
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button 
-                      onClick={() => setShowReport(true)}
-                      className="bg-[#141414] text-[#E4E3E0] px-8 py-4 rounded-full font-bold hover:bg-[#F27D26] transition-colors flex items-center justify-center"
+                  <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                    <Link
+                      to="/training"
+                      className="inline-flex items-center justify-center rounded-full bg-[color:var(--ink)] px-5 py-3.5 text-sm font-semibold text-[color:var(--paper)] hover:bg-[color:var(--accent-strong)]"
                     >
-                      <FileText className="mr-2" size={20} />
-                      View Full Report
-                    </button>
-                    <Link to="/business" className="px-8 py-4 rounded-full font-bold border border-[#141414]/10 hover:bg-[#141414]/5 transition-colors">
-                      Back to Business
+                      Book support
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                    <Link
+                      to="/use"
+                      className="inline-flex items-center justify-center rounded-full border border-[color:var(--line-strong)] bg-white px-5 py-3.5 text-sm font-semibold text-[color:var(--ink)] hover:bg-[color:var(--surface-strong)]"
+                    >
+                      Explore use cases
                     </Link>
                   </div>
-                </motion.div>
-              )
-            ) : (
-              <ReportView key="report" />
-            )}
-          </AnimatePresence>
+
+                  <button
+                    type="button"
+                    onClick={reset}
+                    className="mt-5 inline-flex items-center text-sm font-semibold text-[color:var(--accent-strong)]"
+                  >
+                    <RotateCcw className="mr-2 h-4 w-4" />
+                    Retake the test
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </div>
+
+        <ContinueJourney page="readiness" />
       </div>
     </div>
   );

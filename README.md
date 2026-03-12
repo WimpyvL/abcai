@@ -1,20 +1,24 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# ABCAI
 
-# Run and deploy your AI Studio app
+ABCAI is a practical AI learning and adoption product for South Africa.
 
-This contains everything you need to run your app locally.
+It is positioned around four pillars:
 
-View your app in AI Studio: https://ai.studio/apps/be142aa0-2137-44f6-9dc2-74caee7dea00
+- Learn
+- Use
+- Choose
+- Build
 
-## Run Locally
+The current front-end is a Vite + React app focused on:
 
-**Prerequisites:**  Node.js
+- practical AI learning paths
+- business adoption guidance
+- use-case-based tool selection
+- an outcome-driven prompt library
+- readiness assessment and service conversion paths
 
+## Run locally
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1. Install dependencies with `npm install`
+2. Start the dev server with `npm run dev`
+3. Build for production with `npm run build`

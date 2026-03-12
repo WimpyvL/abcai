@@ -1,119 +1,220 @@
 import React from 'react';
-import { motion } from 'motion/react';
-import { Mail, MessageSquare, Calendar, MapPin, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
+import { ArrowRight, Mail, MapPin, Send } from 'lucide-react';
+import { ContinueJourney, JourneyCompass } from '../components/Journey';
+import { PageQuickNav } from '../components/PageQuickNav';
+import { SERVICE_OFFERS } from '../constants';
 
 export const Training = () => {
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [company, setCompany] = React.useState('');
+  const [service, setService] = React.useState(SERVICE_OFFERS[0].title);
+  const [message, setMessage] = React.useState('');
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const subject = encodeURIComponent(`ABCAI enquiry: ${service}`);
+    const body = encodeURIComponent(
+      [
+        `Name: ${name}`,
+        `Email: ${email}`,
+        `Company: ${company || 'Not provided'}`,
+        `Service: ${service}`,
+        '',
+        'What we need help with:',
+        message || 'Please contact me to discuss practical AI support.',
+      ].join('\n')
+    );
+
+    window.location.href = `mailto:hello@abcai.co.za?subject=${subject}&body=${body}`;
+  };
+
   return (
-    <div className="pt-24 pb-24 bg-[#E4E3E0]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <header className="max-w-3xl mb-20">
-          <span className="font-mono text-xs uppercase tracking-widest text-[#F27D26] mb-4 block">Contact & Training</span>
-          <h1 className="text-6xl font-bold tracking-tighter text-[#141414] mb-6">Let’s Build.</h1>
-          <p className="text-xl text-[#141414]/70 font-serif italic">
-            Whether you need a team workshop, a custom AI audit, or full implementation, we’re here to help you cut through the noise.
-          </p>
+    <div className="px-4 pb-20 pt-28 sm:px-6 lg:px-8">
+      <Helmet>
+        <title>Training and consulting | ABCAI</title>
+        <meta
+          name="description"
+          content="Book practical AI workshops, readiness reviews, and implementation support with ABCAI."
+        />
+      </Helmet>
+
+      <div className="mx-auto max-w-7xl">
+        <JourneyCompass page="training" />
+        <PageQuickNav
+          title="Jump to the part that gets you moving"
+          items={[
+            { id: 'service-offers', label: 'Service offers', description: 'See the workshop, review, and implementation options.' },
+            { id: 'engagement-process', label: 'How it works', description: 'Jump to what happens after you get in touch.' },
+            { id: 'enquiry-form', label: 'Start the conversation', description: 'Go straight to the enquiry form and send the brief.' },
+          ]}
+        />
+
+        <header className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-strong)]">
+              Training and consulting
+            </p>
+            <h1 className="mt-2 text-5xl font-semibold tracking-[-0.06em] sm:text-6xl">
+              Help people use AI properly, then build what matters.
+            </h1>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-[color:var(--muted)]">
+              ABCAI supports teams and businesses with readiness reviews, workshops, workflow design, and implementation
+              guidance. The goal is practical capability, not a motivational keynote about the future.
+            </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-[color:var(--line)] bg-white p-6 sm:p-8">
+            <h2 className="text-2xl font-semibold tracking-[-0.04em]">Good engagements have a clear outcome</h2>
+            <div className="mt-6 space-y-4 text-sm leading-6 text-[color:var(--ink)]/82">
+              {[
+                'Upskill a team that is curious but uneven.',
+                'Audit where AI belongs in the business and where it does not.',
+                'Scope a pilot workflow or implementation path without wasting months.',
+              ].map((item) => (
+                <div key={item} className="rounded-2xl bg-[color:var(--surface-strong)] p-4">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Contact Info */}
-          <div className="lg:col-span-1 space-y-8">
-            <div className="bg-white p-8 rounded-3xl border border-[#141414]/5">
-              <h3 className="text-xl font-bold mb-6">Get in Touch</h3>
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="bg-[#F27D26]/10 p-2 rounded-lg text-[#F27D26]">
-                    <Mail size={20} />
+        <section id="service-offers" className="mt-12 grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
+          {SERVICE_OFFERS.map((offer) => (
+            <article key={offer.title} className="rounded-[2rem] border border-[color:var(--line)] bg-white p-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-strong)]">
+                {offer.audience}
+              </p>
+              <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">{offer.title}</h2>
+              <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">{offer.summary}</p>
+              <div className="mt-5 space-y-2">
+                {offer.deliverables.map((deliverable) => (
+                  <div key={deliverable} className="rounded-2xl bg-[color:var(--surface-strong)] px-4 py-3 text-sm text-[color:var(--ink)]/82">
+                    {deliverable}
                   </div>
-                  <div>
-                    <p className="text-xs font-bold uppercase text-[#141414]/40 mb-1">Email</p>
-                    <a href="mailto:hello@abcai.co.za" className="text-[#141414] font-medium hover:text-[#F27D26]">hello@abcai.co.za</a>
+                ))}
+              </div>
+            </article>
+          ))}
+        </section>
+
+        <section className="mt-16 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+          <div id="engagement-process" className="rounded-[2rem] bg-[color:var(--ink)] p-6 text-[color:var(--paper)] sm:p-8">
+            <h2 className="text-3xl font-semibold tracking-[-0.05em]">What happens after you get in touch</h2>
+            <div className="mt-6 space-y-4 text-sm leading-7 text-[color:rgba(248,244,238,0.78)]">
+              {[
+                'We clarify the actual problem, audience, and desired outcome.',
+                'We recommend the smallest credible next step: workshop, review, pilot, or implementation support.',
+                'You leave with a practical direction instead of another vague AI transformation story.',
+              ].map((item, index) => (
+                <div key={item} className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                  <div className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:rgba(248,244,238,0.48)]">
+                    Step 0{index + 1}
                   </div>
+                  <p className="mt-2">{item}</p>
                 </div>
-                <div className="flex items-start space-x-4">
-                  <div className="bg-[#F27D26]/10 p-2 rounded-lg text-[#F27D26]">
-                    <MessageSquare size={20} />
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold uppercase text-[#141414]/40 mb-1">WhatsApp</p>
-                    <p className="text-[#141414] font-medium">+27 (0) 12 345 6789</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-4">
-                  <div className="bg-[#F27D26]/10 p-2 rounded-lg text-[#F27D26]">
-                    <MapPin size={20} />
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold uppercase text-[#141414]/40 mb-1">Location</p>
-                    <p className="text-[#141414] font-medium">Cape Town / Remote</p>
-                  </div>
-                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 rounded-[1.8rem] border border-white/10 bg-white/5 p-5 text-sm text-[color:rgba(248,244,238,0.78)]">
+              <div className="flex items-center gap-3">
+                <Mail className="h-5 w-5 text-[color:var(--accent)]" />
+                <a href="mailto:hello@abcai.co.za" className="font-semibold text-white">
+                  hello@abcai.co.za
+                </a>
+              </div>
+              <div className="mt-3 flex items-center gap-3">
+                <MapPin className="h-5 w-5 text-[color:var(--accent)]" />
+                <span>South Africa based, remote-friendly.</span>
               </div>
             </div>
-
-            <div className="bg-[#141414] p-8 rounded-3xl text-[#E4E3E0]">
-              <h3 className="text-xl font-bold mb-4">Loop69 Integration</h3>
-              <p className="text-[#E4E3E0]/60 text-sm mb-6">
-                ABCAI teaches you the basics. Loop69 builds the deep technical solutions. We work together to provide end-to-end AI implementation.
-              </p>
-              <button className="text-[#F27D26] font-bold text-sm flex items-center group">
-                Learn about Loop69
-                <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
           </div>
 
-          {/* Contact Form / Services */}
-          <div className="lg:col-span-2 space-y-12">
-            <div className="bg-white p-10 md:p-16 rounded-[3rem] border border-[#141414]/5">
-              <h2 className="text-3xl font-bold mb-8">How can we help?</h2>
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase text-[#141414]/40">Name</label>
-                    <input type="text" className="w-full p-4 bg-[#E4E3E0]/30 rounded-xl border-none focus:ring-2 focus:ring-[#F27D26]/20" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase text-[#141414]/40">Email</label>
-                    <input type="email" className="w-full p-4 bg-[#E4E3E0]/30 rounded-xl border-none focus:ring-2 focus:ring-[#F27D26]/20" />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase text-[#141414]/40">Service Interested In</label>
-                  <select className="w-full p-4 bg-[#E4E3E0]/30 rounded-xl border-none focus:ring-2 focus:ring-[#F27D26]/20 appearance-none">
-                    <option>Team Training / Workshop</option>
-                    <option>AI Business Audit</option>
-                    <option>Implementation Package</option>
-                    <option>Consulting</option>
+          <div id="enquiry-form" className="rounded-[2rem] border border-[color:var(--line)] bg-white p-6 sm:p-8">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-strong)]">
+                  Enquiry form
+                </p>
+                <h2 className="mt-2 text-3xl font-semibold tracking-[-0.05em]">Start the conversation</h2>
+              </div>
+              <Send className="h-6 w-6 text-[color:var(--accent)]" />
+            </div>
+
+            <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+              <div className="grid gap-5 sm:grid-cols-2">
+                <label className="block text-sm">
+                  <span className="font-medium text-[color:var(--ink)]">Name</span>
+                  <input
+                    required
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    className="mt-2 w-full rounded-2xl border border-[color:var(--line)] bg-[color:var(--surface)] px-4 py-3 outline-none focus:border-[color:var(--accent)]"
+                  />
+                </label>
+                <label className="block text-sm">
+                  <span className="font-medium text-[color:var(--ink)]">Email</span>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    className="mt-2 w-full rounded-2xl border border-[color:var(--line)] bg-[color:var(--surface)] px-4 py-3 outline-none focus:border-[color:var(--accent)]"
+                  />
+                </label>
+              </div>
+
+              <div className="grid gap-5 sm:grid-cols-2">
+                <label className="block text-sm">
+                  <span className="font-medium text-[color:var(--ink)]">Company or team</span>
+                  <input
+                    value={company}
+                    onChange={(event) => setCompany(event.target.value)}
+                    className="mt-2 w-full rounded-2xl border border-[color:var(--line)] bg-[color:var(--surface)] px-4 py-3 outline-none focus:border-[color:var(--accent)]"
+                  />
+                </label>
+                <label className="block text-sm">
+                  <span className="font-medium text-[color:var(--ink)]">What do you need?</span>
+                  <select
+                    value={service}
+                    onChange={(event) => setService(event.target.value)}
+                    className="mt-2 w-full rounded-2xl border border-[color:var(--line)] bg-[color:var(--surface)] px-4 py-3 outline-none focus:border-[color:var(--accent)]"
+                  >
+                    {SERVICE_OFFERS.map((offer) => (
+                      <option key={offer.title} value={offer.title}>
+                        {offer.title}
+                      </option>
+                    ))}
                   </select>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase text-[#141414]/40">Message</label>
-                  <textarea rows={4} className="w-full p-4 bg-[#E4E3E0]/30 rounded-xl border-none focus:ring-2 focus:ring-[#F27D26]/20"></textarea>
-                </div>
-                <button className="w-full bg-[#141414] text-[#E4E3E0] py-5 rounded-xl font-bold hover:bg-[#F27D26] transition-colors">
-                  Send Message
-                </button>
-              </form>
-            </div>
+                </label>
+              </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-               {[
-                 { title: 'AI Audits', desc: 'A deep dive into your current workflows to identify AI opportunities.' },
-                 { title: 'Team Training', desc: 'Hands-on workshops to get your staff comfortable and productive with AI.' },
-                 { title: 'Implementation', desc: 'We don’t just advise; we build the automations and tools you need.' },
-                 { title: 'Prompt Strategy', desc: 'Custom prompt libraries built specifically for your business data.' },
-               ].map((service) => (
-                 <div key={service.title} className="flex items-start space-x-4">
-                    <CheckCircle2 size={20} className="text-[#F27D26] mt-1 shrink-0" />
-                    <div>
-                      <h4 className="font-bold text-[#141414]">{service.title}</h4>
-                      <p className="text-sm text-[#141414]/60">{service.desc}</p>
-                    </div>
-                 </div>
-               ))}
-            </div>
+              <label className="block text-sm">
+                <span className="font-medium text-[color:var(--ink)]">Context</span>
+                <textarea
+                  rows={6}
+                  value={message}
+                  onChange={(event) => setMessage(event.target.value)}
+                  placeholder="Tell us what you want to improve, who needs help, and what success would look like."
+                  className="mt-2 w-full rounded-[1.6rem] border border-[color:var(--line)] bg-[color:var(--surface)] px-4 py-3 outline-none focus:border-[color:var(--accent)]"
+                />
+              </label>
+
+              <button
+                type="submit"
+                className="inline-flex items-center rounded-full bg-[color:var(--ink)] px-6 py-3.5 text-sm font-semibold text-[color:var(--paper)] hover:bg-[color:var(--accent-strong)]"
+              >
+                Send enquiry
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </button>
+            </form>
           </div>
-        </div>
+        </section>
+
+        <ContinueJourney page="training" />
       </div>
     </div>
   );

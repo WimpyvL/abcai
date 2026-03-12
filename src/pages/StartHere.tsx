@@ -1,118 +1,224 @@
-import React from 'react';
 import { motion } from 'motion/react';
-import { Zap, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
+import { ArrowRight, CheckCircle2, Compass, Route, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { ContinueJourney, JourneyCompass } from '../components/Journey';
+import { useJourneyProfile } from '../components/JourneyProfile';
+import { PageQuickNav } from '../components/PageQuickNav';
+import { AUDIENCE_PATHS, FEATURED_GUIDES } from '../constants';
 
 export const StartHere = () => {
-  const tracks = [
-    {
-      id: 'brand-new',
-      title: 'I’m brand new to AI',
-      description: 'Start with the basics. No jargon, just clear explanations of what AI is and how to start using it today.',
-      steps: ['What is AI?', 'Your first prompt', 'Setting up ChatGPT', 'Free tools to try']
-    },
-    {
-      id: 'business',
-      title: 'I want to use AI in my business',
-      description: 'Practical strategies for business owners to increase efficiency and cut costs without breaking the bank.',
-      steps: ['AI Readiness Audit', 'Low-cost toolstack', 'Automating admin', 'Customer support AI']
-    },
-    {
-      id: 'automate',
-      title: 'I want to automate work',
-      description: 'For the efficiency seekers. Learn how to connect tools and let AI handle the repetitive tasks.',
-      steps: ['Workflow mapping', 'Zapier & Make basics', 'AI Agents 101', 'Before & After examples']
-    },
-    {
-      id: 'build',
-      title: 'I want to build with AI',
-      description: 'For the creators and developers. Learn how to integrate AI into your products and services.',
-      steps: ['API basics', 'Custom GPTs', 'No-code AI builders', 'Deployment tips']
-    }
-  ];
+  const { setProfile } = useJourneyProfile();
 
   return (
-    <div className="pt-24 pb-24 bg-[#E4E3E0]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <header className="max-w-3xl mb-20">
-          <span className="font-mono text-xs uppercase tracking-widest text-[#F27D26] mb-4 block">The Journey Starts Here</span>
-          <h1 className="text-6xl font-bold tracking-tighter text-[#141414] mb-6">Choose Your Track.</h1>
-          <p className="text-xl text-[#141414]/70 font-serif italic">
-            Most people are overwhelmed by AI. We’ve broken it down into four clear paths. Pick the one that fits your goals.
-          </p>
+    <div className="px-4 pb-20 pt-28 sm:px-6 lg:px-8">
+      <Helmet>
+        <title>Learn AI | ABCAI</title>
+        <meta
+          name="description"
+          content="Start learning AI with plain-language guidance, practical first steps, and clear routes based on your goals."
+        />
+      </Helmet>
+
+      <div className="mx-auto max-w-7xl">
+        <JourneyCompass page="learn" />
+        <PageQuickNav
+          title="Jump to the right learning layer"
+          items={[
+            { id: 'learning-paths', label: 'Starting paths', description: 'Go straight to the entry path that matches your current goal.' },
+            { id: 'first-week-plan', label: 'First-week plan', description: 'See the clean sequence for your first useful week with AI.' },
+            { id: 'beginner-cautions', label: 'What to avoid', description: 'Skip to the mistakes that catch beginners fastest.' },
+            { id: 'learn-next', label: 'Learn next', description: 'Move into the next resources once the basics are clear.' },
+          ]}
+        />
+
+        <header className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-strong)]">
+              Learn
+            </p>
+            <h1 className="mt-2 text-5xl font-semibold tracking-[-0.06em] sm:text-6xl">Start with clarity, not confusion.</h1>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-[color:var(--muted)]">
+              If AI feels noisy, that is because most people explain it badly. This section turns the chaos into clean
+              starting paths, practical first steps, and an honest view of what AI can and cannot do.
+            </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-[color:var(--line)] bg-white p-6">
+            <div className="flex items-center gap-3">
+              <Compass className="h-6 w-6 text-[color:var(--accent)]" />
+              <h2 className="text-xl font-semibold tracking-[-0.04em]">What good onboarding should do</h2>
+            </div>
+            <ul className="mt-5 space-y-3 text-sm leading-6 text-[color:var(--ink)]/82">
+              {[
+                'Explain the language without making people feel stupid.',
+                'Show realistic use cases before advanced tooling.',
+                'Give the user one obvious next move for their context.',
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--accent)]" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {tracks.map((track, idx) => (
-            <motion.div
-              key={track.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="bg-white rounded-3xl p-10 border border-[#141414]/5 flex flex-col h-full"
-            >
-              <div className="flex items-center justify-between mb-8">
-                <div className="w-12 h-12 bg-[#F27D26] rounded-full flex items-center justify-center text-[#E4E3E0]">
-                  <Zap size={24} />
+        <section id="learning-paths" className="mt-12">
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {AUDIENCE_PATHS.map((path, index) => (
+              <motion.div
+                key={path.id}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.25 }}
+                transition={{ delay: index * 0.05 }}
+                className="rounded-[2rem] border border-[color:var(--line)] bg-white p-6 shadow-[0_14px_40px_rgba(23,33,39,0.05)]"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-strong)]">
+                  {path.id}
+                </p>
+                <h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">{path.title}</h2>
+                <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">{path.summary}</p>
+                <div className="mt-5 rounded-2xl bg-[color:var(--surface-strong)] p-4 text-sm leading-6 text-[color:var(--ink)]/82">
+                  <span className="font-semibold">Best first move:</span> {path.firstMove}
                 </div>
-                <span className="font-mono text-xs text-[#141414]/30">TRACK 0{idx + 1}</span>
-              </div>
-              
-              <h3 className="text-3xl font-bold text-[#141414] mb-4">{track.title}</h3>
-              <p className="text-[#141414]/60 mb-8">{track.description}</p>
-              
-              <div className="space-y-3 mb-10">
-                {track.steps.map((step) => (
-                  <div key={step} className="flex items-center space-x-3 text-sm font-medium text-[#141414]/80">
-                    <CheckCircle2 size={16} className="text-[#F27D26]" />
-                    <span>{step}</span>
-                  </div>
-                ))}
-              </div>
+                <div className="mt-5 space-y-2">
+                  {path.outcomes.map((outcome) => (
+                    <div key={outcome} className="flex items-start gap-3 text-sm text-[color:var(--ink)]/78">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--accent)]" />
+                      <span>{outcome}</span>
+                    </div>
+                  ))}
+                </div>
+                <Link
+                  to={path.href}
+                  onClick={() => setProfile(path.journeyProfile ?? 'beginner')}
+                  className="mt-6 inline-flex items-center text-sm font-semibold text-[color:var(--accent-strong)]"
+                >
+                  Open this path
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </section>
 
-              <button className="mt-auto w-full bg-[#141414] text-[#E4E3E0] py-4 rounded-xl font-bold hover:bg-[#F27D26] transition-colors flex items-center justify-center group">
-                Start This Track
-                <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </motion.div>
-          ))}
-        </div>
+        <section id="first-week-plan" className="mt-16 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="rounded-[2rem] bg-[color:var(--ink)] p-6 text-[color:var(--paper)] sm:p-8">
+            <div className="flex items-center gap-3">
+              <Route className="h-6 w-6 text-[color:var(--accent)]" />
+              <h2 className="text-2xl font-semibold tracking-[-0.04em]">A sane first-week learning path</h2>
+            </div>
+            <div className="mt-6 space-y-5">
+              {[
+                {
+                  step: 'Day 1',
+                  title: 'Understand what AI actually is',
+                  detail: 'Focus on pattern prediction, useful output, and limits. Skip the futurist sermon.',
+                },
+                {
+                  step: 'Day 2',
+                  title: 'Learn to give better instructions',
+                  detail: 'Good prompting is mostly good briefing: context, constraints, examples, and output format.',
+                },
+                {
+                  step: 'Day 3',
+                  title: 'Try three useful everyday tasks',
+                  detail: 'Summaries, drafting, and planning are the easiest honest wins.',
+                },
+                {
+                  step: 'Day 4+',
+                  title: 'Only then start comparing tools',
+                  detail: 'If you do this first, you buy subscriptions for problems you have not defined yet.',
+                },
+              ].map((item) => (
+                <div key={item.step} className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:rgba(248,244,238,0.48)]">
+                    {item.step}
+                  </p>
+                  <h3 className="mt-2 text-xl font-semibold">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[color:rgba(248,244,238,0.76)]">{item.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
 
-        {/* AI Basics Section */}
-        <section className="mt-32">
-          <div className="bg-[#141414] rounded-[3rem] p-12 md:p-20 text-[#E4E3E0]">
-            <div className="max-w-3xl">
-              <h2 className="text-4xl font-bold mb-8">AI Basics Without the Nonsense</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div>
-                  <h4 className="font-serif italic text-xl text-[#F27D26] mb-4">What AI actually is</h4>
-                  <p className="text-[#E4E3E0]/60 text-sm leading-relaxed">
-                    It's not a magic brain. It's high-level pattern matching that can predict the next best word, pixel, or action based on massive amounts of data.
-                  </p>
+          <div id="beginner-cautions" className="rounded-[2rem] border border-[color:var(--line)] bg-white p-6 sm:p-8">
+            <div className="flex items-center gap-3">
+              <ShieldCheck className="h-6 w-6 text-[color:var(--accent)]" />
+              <h2 className="text-2xl font-semibold tracking-[-0.04em]">What beginners should be careful about</h2>
+            </div>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              {[
+                {
+                  title: 'Do not trust fluency',
+                  detail: 'AI sounding confident tells you nothing about whether it is correct.',
+                },
+                {
+                  title: 'Do not feed it sensitive data casually',
+                  detail: 'Privacy and confidentiality rules still apply, especially at work.',
+                },
+                {
+                  title: 'Do not confuse drafts with finished work',
+                  detail: 'AI is often best at the first pass, not the final answer.',
+                },
+                {
+                  title: 'Do not start with the fanciest tool',
+                  detail: 'Start with the clearest task. Tool choice gets easier after that.',
+                },
+              ].map((item) => (
+                <div key={item.title} className="rounded-2xl bg-[color:var(--surface-strong)] p-5">
+                  <h3 className="text-lg font-semibold tracking-[-0.03em]">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">{item.detail}</p>
                 </div>
-                <div>
-                  <h4 className="font-serif italic text-xl text-[#F27D26] mb-4">What ChatGPT is good at</h4>
-                  <p className="text-[#E4E3E0]/60 text-sm leading-relaxed">
-                    Drafting, summarizing, coding, and brainstorming. It's like having a very fast, slightly overconfident intern.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-serif italic text-xl text-[#F27D26] mb-4">What AI still sucks at</h4>
-                  <p className="text-[#E4E3E0]/60 text-sm leading-relaxed">
-                    Fact-checking, deep emotional intelligence, and complex multi-step reasoning without guidance.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-serif italic text-xl text-[#F27D26] mb-4">What prompts are</h4>
-                  <p className="text-[#E4E3E0]/60 text-sm leading-relaxed">
-                    The instructions you give the AI. Better instructions = better results. It's a new form of communication.
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
+
+        <section id="learn-next" className="mt-16">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-strong)]">
+                Learn next
+              </p>
+              <h2 className="mt-2 text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
+                Follow the tracks that actually reduce overwhelm
+              </h2>
+            </div>
+            <Link
+              to="/choose"
+              onClick={() => setProfile('beginner')}
+              className="inline-flex items-center text-sm font-semibold text-[color:var(--accent-strong)]"
+            >
+              Compare tools next
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {FEATURED_GUIDES.slice(0, 3).map((guide) => (
+              <div key={guide.title} className="rounded-[2rem] border border-[color:var(--line)] bg-white p-6">
+                <span className="rounded-full bg-[color:var(--accent-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--accent-strong)]">
+                  {guide.format}
+                </span>
+                <h3 className="mt-4 text-2xl font-semibold tracking-[-0.04em]">{guide.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">{guide.summary}</p>
+                <ul className="mt-5 space-y-2 text-sm text-[color:var(--ink)]/78">
+                  {guide.takeaways.map((takeaway) => (
+                    <li key={takeaway} className="flex items-start gap-2">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--accent)]" />
+                      <span>{takeaway}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <ContinueJourney page="learn" />
       </div>
     </div>
   );

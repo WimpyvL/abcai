@@ -1,382 +1,756 @@
-import { Tool, Prompt, UseCase } from './types';
+import type {
+  AudiencePath,
+  BuildTrack,
+  Comparison,
+  FeaturedGuide,
+  FooterLinkGroup,
+  NavItem,
+  Pillar,
+  Prompt,
+  ReadinessBand,
+  ReadinessQuestion,
+  ServiceOffer,
+  SignatureQuestion,
+  Tool,
+  TrustSignal,
+  UseCase,
+} from './types';
 
-export const TOOLS: Tool[] = [
-  {
-    name: 'ChatGPT',
-    category: 'General Purpose',
-    description: 'The industry standard for text generation, reasoning, and coding.',
-    bestFor: 'Writing, brainstorming, and complex logic.',
-    price: 'Freemium',
-    url: 'https://chat.openai.com'
-  },
-  {
-    name: 'Claude',
-    category: 'Writing & Analysis',
-    description: 'Known for more natural writing and large context windows.',
-    bestFor: 'Long-form content and detailed document analysis.',
-    price: 'Freemium',
-    url: 'https://claude.ai'
-  },
-  {
-    name: 'Perplexity',
-    category: 'Search & Research',
-    description: 'An AI-powered search engine that provides cited sources.',
-    bestFor: 'Fact-checking and real-time research.',
-    price: 'Freemium',
-    url: 'https://perplexity.ai'
-  },
-  {
-    name: 'Midjourney',
-    category: 'Image Generation',
-    description: 'The highest quality AI image generator available today.',
-    bestFor: 'Professional photography, art, and complex visual concepts.',
-    price: 'Paid',
-    url: 'https://midjourney.com'
-  },
-  {
-    name: 'Leonardo.ai',
-    category: 'Image Generation',
-    description: 'A powerful web-based image generator with fine-tuned models.',
-    bestFor: 'Game assets, character design, and consistent styles.',
-    price: 'Freemium',
-    url: 'https://leonardo.ai'
-  },
-  {
-    name: 'Adobe Firefly',
-    category: 'Design',
-    description: 'Generative AI built directly into Adobe Creative Cloud.',
-    bestFor: 'Commercial-safe image generation and editing.',
-    price: 'Freemium',
-    url: 'https://adobe.com/firefly'
-  },
-  {
-    name: 'ElevenLabs',
-    category: 'Audio & Voice',
-    description: 'Lifelike AI voice synthesis and cloning technology.',
-    bestFor: 'Voiceovers, audiobooks, and localized video content.',
-    price: 'Freemium',
-    url: 'https://elevenlabs.io'
-  },
-  {
-    name: 'Suno',
-    category: 'Audio & Music',
-    description: 'Generate full songs with lyrics and vocals from a prompt.',
-    bestFor: 'Custom music for content, gifts, or fun.',
-    price: 'Freemium',
-    url: 'https://suno.com'
-  },
-  {
-    name: 'HeyGen',
-    category: 'Video Generation',
-    description: 'Create professional videos with AI avatars and voice cloning.',
-    bestFor: 'Training videos, personalized sales outreach, and marketing.',
-    price: 'Freemium',
-    url: 'https://heygen.com'
-  },
-  {
-    name: 'Runway',
-    category: 'Video Generation',
-    description: 'Next-generation creative tools for video generation and editing.',
-    bestFor: 'Cinematic video effects and text-to-video generation.',
-    price: 'Freemium',
-    url: 'https://runwayml.com'
-  },
-  {
-    name: 'Pika',
-    category: 'Video Generation',
-    description: 'An idea-to-video platform that brings your imagination to life.',
-    bestFor: 'Short animations and social media video content.',
-    price: 'Freemium',
-    url: 'https://pika.art'
-  },
-  {
-    name: 'Gamma',
-    category: 'Presentations',
-    description: 'Generate beautiful presentations, websites, and docs from a prompt.',
-    bestFor: 'Quick pitch decks and internal business presentations.',
-    price: 'Freemium',
-    url: 'https://gamma.app'
-  },
-  {
-    name: 'Notion AI',
-    category: 'Productivity',
-    description: 'AI integrated directly into your Notion workspace.',
-    bestFor: 'Summarizing notes, drafting docs, and brainstorming.',
-    price: 'Paid',
-    url: 'https://notion.so'
-  },
-  {
-    name: 'Cursor',
-    category: 'Development',
-    description: 'An AI-native code editor built for pair programming with AI.',
-    bestFor: 'Software developers looking to 10x their productivity.',
-    price: 'Freemium',
-    url: 'https://cursor.com'
-  },
-  {
-    name: 'Phind',
-    category: 'Development',
-    description: 'An AI search engine specifically for developers.',
-    bestFor: 'Solving coding problems and learning new technologies.',
-    price: 'Freemium',
-    url: 'https://phind.com'
-  },
-  {
-    name: 'Fireflies.ai',
-    category: 'Meetings',
-    description: 'AI meeting assistant that transcribes, summarizes, and analyzes calls.',
-    bestFor: 'Automating meeting notes and tracking action items.',
-    price: 'Freemium',
-    url: 'https://fireflies.ai'
-  },
-  {
-    name: 'Otter.ai',
-    category: 'Meetings',
-    description: 'Real-time transcription and meeting notes for teams.',
-    bestFor: 'Capturing every detail of live meetings and interviews.',
-    price: 'Freemium',
-    url: 'https://otter.ai'
-  },
-  {
-    name: 'Jasper',
-    category: 'Marketing',
-    description: 'AI content platform for enterprise marketing teams.',
-    bestFor: 'Brand-consistent copy and large-scale content creation.',
-    price: 'Paid',
-    url: 'https://jasper.ai'
-  },
-  {
-    name: 'Canva Magic Studio',
-    category: 'Design',
-    description: 'AI tools integrated into the popular design platform.',
-    bestFor: 'Small business owners creating social media content.',
-    price: 'Freemium',
-    url: 'https://canva.com'
-  }
+export const NAV_ITEMS: NavItem[] = [
+  { label: 'Learn', path: '/learn', description: 'AI basics, first steps, and practical learning tracks.' },
+  { label: 'Use', path: '/use', description: 'Business use cases, workflow ideas, and adoption guidance.' },
+  { label: 'Choose', path: '/choose', description: 'Tool comparisons and plain-English buying decisions.' },
+  { label: 'Build', path: '/build', description: 'Technical and no-code implementation paths.' },
+  { label: 'Prompts', path: '/prompts', description: 'Ready-to-use prompts grouped by outcome.' },
 ];
 
-export const PROMPTS: Prompt[] = [
+export const TRUST_SIGNALS: TrustSignal[] = [
   {
-    id: 'sales-1',
-    title: 'Consultative Sales Script',
-    category: 'Sales',
-    text: 'Act as a high-performing sales consultant. Draft a script for a discovery call with a [Target Client Type] who is struggling with [Problem]. Focus on asking open-ended questions that lead to our solution: [Product/Service].',
-    description: 'A script focused on value and discovery rather than hard selling.'
+    value: '4',
+    label: 'core pillars',
+    detail: 'Learn, Use, Choose, and Build keep the site structured instead of noisy.',
   },
   {
-    id: 'sales-2',
-    title: 'Objection Handling Guide',
-    category: 'Sales',
-    text: 'I am selling [Product/Service] and the prospect just said: "[Objection]". Provide 3 different ways to handle this objection using the "Feel, Felt, Found" method or similar consultative techniques.',
-    description: 'Turn "no" into "not yet" or "yes".'
+    value: '6',
+    label: 'start paths',
+    detail: 'Visitors can begin from their actual goal instead of guessing where to click.',
   },
   {
-    id: 'marketing-1',
-    title: 'Local SEO Blog Post',
-    category: 'Marketing',
-    text: 'Write a 600-word blog post about [Topic] specifically for a South African audience. Include local references, mention [City/Region], and optimize for keywords: [Keywords]. Use a helpful, authoritative tone.',
-    description: 'Perfect for building local search authority.'
+    value: 'SA-first',
+    label: 'practical framing',
+    detail: 'Examples reflect budgets, bandwidth, staffing pressure, and ROI reality.',
   },
   {
-    id: 'marketing-2',
-    title: 'PPC Ad Copy Variations',
-    category: 'Marketing',
-    text: 'Create 5 variations of Google Search Ad copy for [Product/Service]. Each variation should have a headline (max 30 chars) and a description (max 90 chars). Focus on [Benefit/Offer].',
-    description: 'High-converting ad copy in seconds.'
+    value: 'Beginner to technical',
+    label: 'coverage',
+    detail: 'The platform serves first-timers, teams, founders, operators, and developers.',
+  },
+];
+
+export const AUDIENCE_PATHS: AudiencePath[] = [
+  {
+    id: 'new',
+    title: "I'm new to AI",
+    summary: 'Understand the basics, stop the overwhelm, and learn what is worth your time.',
+    href: '/learn',
+    firstMove: 'Start with AI basics, better prompts, and simple low-risk use cases.',
+    outcomes: ['Understand AI terms without jargon', 'Pick your first tools', 'Use AI safely'],
+    journeyProfile: 'beginner',
   },
   {
-    id: 'email-1',
-    title: 'Polite Debt Collection',
-    category: 'Email',
-    text: 'Write a professional and polite follow-up email for an overdue invoice of [Amount] for [Service]. The tone should be firm but maintain the relationship. Mention the original due date of [Date].',
-    description: 'Get paid without burning bridges.'
+    id: 'business',
+    title: 'I want to use AI in my business',
+    summary: 'Find use cases with real ROI instead of chasing whatever is trending this week.',
+    href: '/use',
+    firstMove: 'Map where your team loses time, then start with admin, support, or sales workflows.',
+    outcomes: ['Spot quick wins', 'Reduce repetitive work', 'Avoid risky implementation'],
+    journeyProfile: 'business',
   },
   {
-    id: 'email-2',
-    title: 'Re-engagement Campaign',
-    category: 'Email',
-    text: 'Write a 3-email sequence to re-engage past clients who haven\'t purchased in [Time Period]. Focus on [New Feature/Offer] and offer a [Discount/Incentive] to return.',
-    description: 'Bring back your best customers.'
+    id: 'automate',
+    title: 'I want to automate work',
+    summary: 'See where AI belongs inside workflows, and where automation alone is enough.',
+    href: '/use',
+    firstMove: 'Document the current process before touching tools. Bad workflows scale badly.',
+    outcomes: ['Map repeatable tasks', 'Choose good automation targets', 'Keep humans in the loop'],
+    journeyProfile: 'business',
   },
   {
-    id: 'support-1',
-    title: 'Angry Customer Response',
-    category: 'Support',
-    text: 'Draft a response to a customer who is angry about [Issue]. Empathize with their frustration, explain what happened without making excuses, and offer [Solution/Compensation].',
-    description: 'De-escalate tension with professional empathy.'
+    id: 'build',
+    title: 'I want to build with AI',
+    summary: 'Go beyond prompting into APIs, assistants, automations, and lightweight products.',
+    href: '/build',
+    firstMove: 'Pick one narrow use case and build a boring, useful workflow before going agent-heavy.',
+    outcomes: ['Choose the right stack', 'Ship credible prototypes', 'Avoid agent theatre'],
+    journeyProfile: 'builder',
   },
   {
-    id: 'support-2',
-    title: 'FAQ Knowledge Base Article',
-    category: 'Support',
-    text: 'Write a clear, step-by-step knowledge base article explaining how to [Process/Task] in our system. Use simple language and include a "Troubleshooting" section at the end.',
-    description: 'Help customers help themselves.'
+    id: 'choose',
+    title: 'I want to choose the right tools',
+    summary: 'Compare tools by job-to-be-done, budget, and team fit.',
+    href: '/choose',
+    firstMove: 'Decide the job first. Tool choice gets easier once the use case is honest.',
+    outcomes: ['Compare tools clearly', 'Understand pricing tradeoffs', 'Avoid duplicate subscriptions'],
+    journeyProfile: 'business',
   },
   {
-    id: 'planning-1',
-    title: 'Quarterly Business Review',
-    category: 'Planning',
-    text: 'Analyze these business metrics: [Metrics]. Identify the top 3 growth opportunities and the 2 biggest risks for the next quarter. Suggest a 90-day action plan to address them.',
-    description: 'Strategic thinking powered by your data.'
+    id: 'training',
+    title: 'I want team training or consulting',
+    summary: 'Get workshops, readiness reviews, and implementation support that lead somewhere.',
+    href: '/training',
+    firstMove: 'Start with a readiness review or scoped workshop before buying a big transformation story.',
+    outcomes: ['Upskill teams', 'Plan implementation', 'Create a practical next step'],
+    journeyProfile: 'business',
+  },
+];
+
+export const PILLARS: Pillar[] = [
+  {
+    id: 'learn',
+    title: 'Learn',
+    label: 'AI basics without the nonsense',
+    summary: 'Plain-language learning tracks for people who need clarity before they need complexity.',
+    href: '/learn',
+    highlights: ['What AI is', 'Where AI fails', 'Prompting basics'],
+    cta: 'Start learning',
   },
   {
-    id: 'planning-2',
-    title: 'Competitor SWOT Analysis',
-    category: 'Planning',
-    text: 'Perform a SWOT analysis for [Competitor Name] in the [Industry] market. Compare their strengths and weaknesses against our business: [Our Business Name].',
-    description: 'Know your competition better than they know themselves.'
+    id: 'use',
+    title: 'Use',
+    label: 'Practical workflows and business adoption',
+    summary: 'Role-based examples, automation ideas, and real-world operating guidance.',
+    href: '/use',
+    highlights: ['Workflow examples', 'Industry use cases', 'Adoption cautions'],
+    cta: 'See practical use',
   },
   {
-    id: 'social-1',
-    title: 'Viral LinkedIn Hook',
-    category: 'Social',
-    text: 'Write 5 different "hooks" for a LinkedIn post about [Topic]. Each hook should be under 2 lines and create enough curiosity to make the reader click "see more".',
-    description: 'Stop the scroll and get more views.'
+    id: 'choose',
+    title: 'Choose',
+    label: 'Tool decisions in plain English',
+    summary: 'Curated tool guidance focused on use case, pricing, and fit instead of hype.',
+    href: '/choose',
+    highlights: ['Best tool for the job', 'Free vs paid tradeoffs', 'Simple comparisons'],
+    cta: 'Compare tools',
   },
   {
-    id: 'social-2',
-    title: 'Instagram Carousel Outline',
-    category: 'Social',
-    text: 'Create a 7-slide outline for an Instagram carousel about [Topic]. Include the headline for each slide, the main point, and a suggested visual description.',
-    description: 'Visual storytelling made easy.'
+    id: 'build',
+    title: 'Build',
+    label: 'For technical teams and serious operators',
+    summary: 'APIs, automations, lightweight AI systems, and build choices that still make sense later.',
+    href: '/build',
+    highlights: ['Developer workflows', 'No-code to code path', 'Implementation discipline'],
+    cta: 'Build the right thing',
+  },
+];
+
+export const FEATURED_GUIDES: FeaturedGuide[] = [
+  {
+    category: 'Start here',
+    title: 'AI basics without the nonsense',
+    summary: 'A grounded primer on what AI is, what it does well, where it lies, and how to start safely.',
+    href: '/learn',
+    format: 'Guide',
+    takeaways: ['Stop mixing up AI buzzwords', 'Know when to trust outputs', 'Get your first quick wins'],
   },
   {
-    id: 'dev-1',
-    title: 'React Component Refactor',
-    category: 'Dev',
-    text: 'Refactor the following React component to use functional hooks and improve performance. Explain the changes made: [Code Snippet]',
-    description: 'Clean up your codebase with AI assistance.'
+    category: 'Business',
+    title: 'How a small business should start using AI',
+    summary: 'A practical sequence for owners who want time savings and better output without buying random subscriptions.',
+    href: '/use',
+    format: 'Framework',
+    takeaways: ['Find repeatable tasks', 'Choose low-risk pilots', 'Measure useful outcomes'],
   },
   {
-    id: 'dev-2',
-    title: 'SQL Query Generator',
-    category: 'Dev',
-    text: 'Write a SQL query to [Task, e.g., find all users who signed up in the last 30 days and have spent more than $100]. Assume a schema with tables: [Table Names and Columns].',
-    description: 'Complex queries without the syntax headache.'
-  }
+    category: 'Tools',
+    title: 'Choose the right AI tool for the job',
+    summary: 'Use-case-first comparisons covering writing, research, meetings, design, coding, and automation.',
+    href: '/choose',
+    format: 'Comparison',
+    takeaways: ['Avoid tool overlap', 'See pricing reality', 'Know the tradeoffs'],
+  },
+  {
+    category: 'Prompts',
+    title: 'Prompts that produce work, not fluff',
+    summary: 'Outcome-based prompts with clear inputs, expected outputs, and usage notes for real tasks.',
+    href: '/prompts',
+    format: 'Library',
+    takeaways: ['Prompt with structure', 'Customize properly', 'Review outputs faster'],
+  },
+  {
+    category: 'Readiness',
+    title: 'AI readiness for teams and business owners',
+    summary: 'A quick diagnostic to show whether you should start with training, workflow cleanup, or implementation.',
+    href: '/readiness-test',
+    format: 'Assessment',
+    takeaways: ['Get a score', 'See immediate priorities', 'Know what to do next'],
+  },
+  {
+    category: 'Technical',
+    title: 'Build with AI without building nonsense',
+    summary: 'A practical path for teams shipping assistants, automations, and API-based workflows.',
+    href: '/build',
+    format: 'Track',
+    takeaways: ['Scope tightly', 'Handle data safely', 'Ship boring reliability'],
+  },
+];
+
+export const SIGNATURE_QUESTIONS: SignatureQuestion[] = [
+  {
+    question: 'Can AI build a website?',
+    shortAnswer: 'Yes, parts of it. The planning, review, and final decisions still matter.',
+    whatAiCanDo: 'Draft copy, scaffold layouts, write components, suggest structure, and speed up implementation.',
+    whereHumansMatter: 'Strategy, product judgement, brand clarity, testing, and deciding what should not be built.',
+    recommendedPath: 'Start with Learn if you are new, or Build if you want to ship real product workflows.',
+  },
+  {
+    question: 'Can AI help with bookkeeping?',
+    shortAnswer: 'It can assist. It should not become your unreviewed finance brain.',
+    whatAiCanDo: 'Categorize transactions, summarize expenses, draft follow-up messages, and support reporting workflows.',
+    whereHumansMatter: 'Compliance, reconciliation, final sign-off, and anything that can create tax or cashflow mistakes.',
+    recommendedPath: 'See Use for business workflow ideas and Choose for tools that fit admin-heavy teams.',
+  },
+  {
+    question: 'Can AI replace staff?',
+    shortAnswer: 'Usually no. It changes roles, removes repetitive work, and exposes weak processes.',
+    whatAiCanDo: 'Handle repetitive drafting, summarizing, triage, search, and first-pass support.',
+    whereHumansMatter: 'Judgement, accountability, client trust, escalation, quality control, and ownership.',
+    recommendedPath: 'Use ABCAI to redesign work responsibly before you try to cut headcount.',
+  },
+  {
+    question: 'Can AI help me study or learn faster?',
+    shortAnswer: 'Yes, if you use it as a tutor and critic instead of a cheating machine.',
+    whatAiCanDo: 'Explain concepts, generate quizzes, summarize readings, and create revision plans.',
+    whereHumansMatter: 'Checking facts, doing the hard thinking, and making sure you can perform without the tool.',
+    recommendedPath: 'Start in Learn, then use Prompts to build better study workflows.',
+  },
+];
+
+export const LOCAL_REALITIES = [
+  'Budgets are tighter, so free and low-cost stacks matter.',
+  'Bandwidth and device constraints still shape what is realistic.',
+  'Smaller teams need tools that reduce admin, not add process.',
+  'AI adoption fear is real, which means training and guardrails matter.',
 ];
 
 export const USE_CASES: UseCase[] = [
   {
-    industry: 'Guesthouse / Tourism',
-    title: 'Automated Guest Concierge',
-    description: 'Using AI to handle booking inquiries and local recommendations via WhatsApp, addressing 24/7 staffing gaps.',
-    tools: ['ChatGPT', 'WhatsApp Business'],
-    benefits: ['Handles late-night queries without extra staff', 'Instant local recommendations', 'Multilingual support for international guests']
+    industry: 'Tourism and hospitality',
+    problem: 'Enquiries arrive all day, but small teams cannot answer every booking question fast enough.',
+    aiCanImprove: ['WhatsApp replies', 'FAQ handling', 'itinerary drafting'],
+    exampleWorkflow: 'Use AI to draft responses, summarize guest needs, and prepare staff handoff notes before a human confirms.',
+    tools: ['ChatGPT', 'WhatsApp Business', 'Perplexity'],
+    caution: 'Do not let AI promise availability, pricing, or policy details without a final human check.',
   },
   {
-    industry: 'Real Estate Agency',
-    title: 'Instant Property Listing Generator',
-    description: 'Generate professional property descriptions and social media posts from basic specs, saving hours of admin time.',
-    tools: ['Claude', 'Canva Magic'],
-    benefits: ['Consistent professional tone', 'Faster listing turnaround', 'Automated social media presence']
+    industry: 'Real estate',
+    problem: 'Agents waste time rewriting listing copy, follow-up messages, and client summaries.',
+    aiCanImprove: ['Listing descriptions', 'follow-up emails', 'viewing summaries'],
+    exampleWorkflow: 'Capture property facts once, generate listing variants, then adapt for website, WhatsApp, and social posts.',
+    tools: ['ChatGPT', 'Canva Magic Studio', 'Gamma'],
+    caution: 'Fact-check every generated property detail. AI is not allowed to invent square meterage.',
   },
   {
-    industry: 'Schools & Education',
-    title: 'Personalized Lesson Planning',
-    description: 'Helping teachers create diverse lesson plans and assessment rubrics tailored to different student levels.',
-    tools: ['ChatGPT', 'Curipod'],
-    benefits: ['Reduces teacher burnout', 'Supports inclusive education', 'Quickly generates practice exams']
+    industry: 'Education and training',
+    problem: 'Teachers and trainers are buried in prep, admin, and repetitive explanation.',
+    aiCanImprove: ['Lesson outlines', 'rubrics', 'revision guides'],
+    exampleWorkflow: 'Use AI to generate first drafts of teaching material, then adapt to grade level and curriculum needs.',
+    tools: ['ChatGPT', 'Claude', 'Gamma'],
+    caution: 'Do not outsource subject accuracy or assessment integrity to the model.',
   },
   {
-    industry: 'Legal Practice',
-    title: 'Document Summarization & Review',
-    description: 'Quickly scanning long contracts or case law to find specific clauses or summarize key points.',
-    tools: ['Claude', 'Harvey AI'],
-    benefits: ['Faster research phases', 'Identifies missing clauses', 'Summarizes complex documents for clients']
+    industry: 'Healthcare admin',
+    problem: 'Front-desk staff and admin teams lose time to call summaries, reminder messages, and repetitive documents.',
+    aiCanImprove: ['Call notes', 'patient instructions', 'admin summaries'],
+    exampleWorkflow: 'Transcribe calls, summarize next actions, and draft patient-facing follow-ups for review.',
+    tools: ['Otter', 'ChatGPT', 'Claude'],
+    caution: 'PII and medical data require strict handling. Public models are not a casual dumping ground.',
   },
   {
-    industry: 'Doctor\'s Practice',
-    title: 'Patient Note Summarization',
-    description: 'Transcribing and summarizing patient consultations into structured medical notes for review.',
-    tools: ['Whisper', 'ChatGPT'],
-    benefits: ['More time with patients', 'Accurate record keeping', 'Reduced administrative overhead']
+    industry: 'Legal and professional services',
+    problem: 'Teams spend too much time on document review, intake notes, and first-pass research.',
+    aiCanImprove: ['Clause summaries', 'meeting notes', 'research starting points'],
+    exampleWorkflow: 'Use AI to create first-pass summaries, issue lists, and client-ready plain-English explanations.',
+    tools: ['Claude', 'Perplexity', 'ChatGPT'],
+    caution: 'Everything substantive still needs professional review. Hallucinated legal advice is not funny.',
   },
   {
-    industry: 'Small SA Business (Budget)',
-    title: 'The "One-Person" Marketing Dept',
-    description: 'Using free AI tools to handle email marketing, social media, and basic customer support on a zero-rand budget.',
-    tools: ['ChatGPT (Free)', 'Bing Image Creator'],
-    benefits: ['Professional output on zero budget', 'Works on low-bandwidth mobile devices', 'Bridges the skills gap for non-marketers']
+    industry: 'Small service businesses',
+    problem: 'Owners are acting as sales, admin, support, and marketing all at once.',
+    aiCanImprove: ['Quotes', 'emails', 'content drafts'],
+    exampleWorkflow: 'Create reusable prompt templates for common admin, then layer simple automation once the process is stable.',
+    tools: ['ChatGPT', 'Canva Magic Studio', 'Make'],
+    caution: 'Start with repeated tasks. Do not automate chaos and call it digital transformation.',
   },
-  {
-    industry: 'Agriculture (South Africa)',
-    title: 'Smart Crop & Pest Monitoring',
-    description: 'Helping small-scale farmers monitor crop health and detect pests early using AI-powered image analysis and weather prediction APIs, specifically designed to work with limited technology and low bandwidth.',
-    tools: ['AI Image Analysis', 'Weather APIs', 'WhatsApp AI Bots'],
-    benefits: ['Early detection of pests and diseases', 'Increased crop yields and quality', 'Reduced waste of water and fertilizers', 'Accessible via basic smartphones']
-  },
-  {
-    industry: 'Human Resources (South Africa)',
-    title: 'AI-Driven Talent & Engagement',
-    description: 'Streamlining recruitment and onboarding while boosting employee engagement in a diverse workforce. AI helps bridge the skills gap by identifying potential in non-traditional backgrounds and monitoring sentiment to improve retention.',
-    tools: ['AI Applicant Tracking', 'Sentiment Analysis', 'Onboarding Chatbots'],
-    benefits: ['Improved hiring efficiency despite skills shortages', 'Personalized onboarding for diverse needs', 'Real-time employee sentiment tracking', 'Higher retention rates through proactive engagement']
-  }
 ];
 
-export const ROLE_PATHS = [
+export const IMPLEMENTATION_PHASES = [
   {
-    role: 'Business Owners',
-    description: 'Practical AI strategies for leaders to increase efficiency, cut costs, and future-proof their operations in the South African market.',
-    path: [
-      { level: 'Beginner', topic: 'AI Fundamentals', goal: 'Understand what AI can and cannot do for your bottom line. Learn to identify high-ROI use cases in your current operations.' },
-      { level: 'Intermediate', topic: 'Workflow Automation', goal: 'Connect AI to your existing tools (Email, CRM, WhatsApp). Automate repetitive admin tasks like appointment scheduling and basic customer queries.' },
-      { level: 'Advanced', topic: 'AI Strategy & Audits', goal: 'Build a long-term AI roadmap and data privacy policy. Learn to evaluate AI vendors and manage the cultural shift within your team.' },
-      { level: 'Expert', topic: 'Custom AI Solutions', goal: 'Explore fine-tuning models on your business data or building custom GPTs to act as specialized internal consultants.' }
-    ]
+    phase: 'Phase 1',
+    title: 'Clean up the work before you automate it',
+    summary: 'Document the process, find the repeated steps, and define what good output looks like.',
   },
   {
-    role: 'Creators',
-    description: 'Leverage generative AI to scale your content production, maintain brand consistency, and explore new creative frontiers.',
-    path: [
-      { level: 'Beginner', topic: 'Generative Content', goal: 'Use AI to draft scripts, captions, and basic graphics. Master the art of "iterative prompting" to get better results faster.' },
-      { level: 'Intermediate', topic: 'Multi-modal Workflows', goal: 'Combine text-to-image and text-to-video for complex campaigns. Learn to maintain visual consistency across different AI tools.' },
-      { level: 'Advanced', topic: 'Brand Voice Training', goal: 'Fine-tune models to consistently match your unique creative style. Build a library of "Style Prompts" that define your brand identity.' },
-      { level: 'Expert', topic: 'AI-First Production', goal: 'Integrate AI into every stage of your production pipeline, from conceptualization to final post-production and distribution.' }
-    ]
+    phase: 'Phase 2',
+    title: 'Pilot one useful workflow',
+    summary: 'Pick a small, boring, frequent task where AI can save time without creating outsized risk.',
   },
   {
-    role: 'Developers',
-    description: 'Enhance your development workflow with AI-native tools and learn to build the next generation of intelligent applications.',
-    path: [
-      { level: 'Beginner', topic: 'AI-Assisted Coding', goal: 'Use Copilot/Cursor to speed up boilerplate and debugging. Learn to write code that is "AI-friendly" (modular and well-documented).' },
-      { level: 'Intermediate', topic: 'API Integration', goal: 'Build custom applications using OpenAI or Anthropic APIs. Master function calling and structured data extraction from LLMs.' },
-      { level: 'Advanced', topic: 'Vector DBs & RAG', goal: 'Build intelligent apps that chat with your own private data. Learn about embedding models, vector search, and context window management.' },
-      { level: 'Expert', topic: 'Agentic Workflows', goal: 'Design systems where multiple AI agents collaborate to solve complex, multi-step problems autonomously.' }
-    ]
+    phase: 'Phase 3',
+    title: 'Measure adoption and quality',
+    summary: 'Track time saved, rework rate, user confidence, and where the model still needs supervision.',
   },
   {
-    role: 'Students',
-    description: 'Use AI as a powerful learning companion to master complex subjects, improve research efficiency, and prepare for an AI-integrated workforce.',
-    path: [
-      { level: 'Beginner', topic: 'Study Assistant', goal: 'Use AI to summarize long readings and explain complex concepts. Learn to use AI as a personalized tutor that adapts to your learning style.' },
-      { level: 'Intermediate', topic: 'Critical Thinking', goal: 'Learn to fact-check AI and use it as a debate partner. Understand the limitations and biases of different models.' },
-      { level: 'Advanced', topic: 'AI Career Prep', goal: 'Master the AI tools that will be standard in your future industry. Build a portfolio that showcases your ability to work alongside AI.' },
-      { level: 'Expert', topic: 'Research & Synthesis', goal: 'Use AI to identify patterns in large datasets and synthesize information from diverse academic sources for advanced research projects.' }
-    ]
-  }
+    phase: 'Phase 4',
+    title: 'Scale with guardrails',
+    summary: 'Expand only after prompts, permissions, QA checks, and ownership are clear.',
+  },
 ];
 
-export const COMPARISONS = [
+export const TOOLS: Tool[] = [
   {
-    category: 'Writing & Logic',
-    toolA: { name: 'ChatGPT', strength: 'Versatility & Logic', bestFor: 'Brainstorming, complex reasoning, and coding.' },
-    toolB: { name: 'Claude', strength: 'Natural Tone', bestFor: 'Long-form writing, natural conversation, and large docs.' }
+    name: 'ChatGPT',
+    category: 'Assistant',
+    useCase: 'Writing and general work',
+    pricing: 'Freemium',
+    description: 'A strong all-rounder for writing, reasoning, idea generation, and structured task support.',
+    bestFor: 'Teams that need one flexible assistant before they start buying specialist tools.',
+    fit: 'Great first paid tool if you want broad value across admin, planning, and drafting.',
+    caution: 'Still needs fact-checking and explicit instructions for high-stakes work.',
+    url: 'https://chatgpt.com',
   },
   {
-    category: 'Image Generation',
-    toolA: { name: 'Midjourney', strength: 'Aesthetic Quality', bestFor: 'Professional photography and high-end artistic visuals.' },
-    toolB: { name: 'Leonardo.ai', strength: 'Control & Style', bestFor: 'Game assets, consistent character design, and fine-tuning.' }
+    name: 'Claude',
+    category: 'Assistant',
+    useCase: 'Long documents and careful writing',
+    pricing: 'Freemium',
+    description: 'Often strong at document-heavy work, natural tone, and nuanced summarization.',
+    bestFor: 'Policy summaries, long-form drafting, and document analysis.',
+    fit: 'Useful when your team works with large docs or wants calmer writing output.',
+    caution: 'Do not assume better tone equals better accuracy.',
+    url: 'https://claude.ai',
   },
   {
-    category: 'Search & Research',
-    toolA: { name: 'Perplexity', strength: 'Cited Sources', bestFor: 'Academic research and fact-checked information.' },
-    toolB: { name: 'Google AI', strength: 'Ecosystem Sync', bestFor: 'Quick answers integrated with your Google Workspace.' }
+    name: 'Perplexity',
+    category: 'Research',
+    useCase: 'Research and source-backed answers',
+    pricing: 'Freemium',
+    description: 'AI-powered search with citations that makes early-stage research faster.',
+    bestFor: 'Research, trend checks, market scans, and finding the next source to read.',
+    fit: 'A smart complement to ChatGPT or Claude when you need cited answers.',
+    caution: 'Citations improve trust, but you still need to inspect the underlying sources.',
+    url: 'https://www.perplexity.ai',
   },
   {
-    category: 'Video Generation',
-    toolA: { name: 'Runway', strength: 'Cinematic Control', bestFor: 'High-end visual effects and creative video experiments.' },
-    toolB: { name: 'HeyGen', strength: 'Avatar Realism', bestFor: 'Training videos, avatars, and personalized outreach.' }
-  }
+    name: 'Canva Magic Studio',
+    category: 'Design',
+    useCase: 'Fast marketing assets',
+    pricing: 'Freemium',
+    description: 'Good for lightweight visuals, social assets, and marketing teams that need speed.',
+    bestFor: 'Small teams creating day-to-day design output without a dedicated designer.',
+    fit: 'Strong for practical content production, especially when brand polish matters more than originality.',
+    caution: 'Easy to create generic-looking work if nobody is directing the result.',
+    url: 'https://www.canva.com',
+  },
+  {
+    name: 'Gamma',
+    category: 'Presentation',
+    useCase: 'Presentations and simple docs',
+    pricing: 'Freemium',
+    description: 'Turns outlines into usable presentations and lightweight shareable documents quickly.',
+    bestFor: 'Pitch decks, internal proposals, training docs, and workshop materials.',
+    fit: 'Useful when speed matters and the message is already clear.',
+    caution: 'A weak brief still becomes a weak deck, just faster.',
+    url: 'https://gamma.app',
+  },
+  {
+    name: 'Fireflies',
+    category: 'Meetings',
+    useCase: 'Meeting notes and follow-up',
+    pricing: 'Freemium',
+    description: 'Captures meeting transcripts, summaries, and action items.',
+    bestFor: 'Sales calls, project handoffs, and teams that forget what was agreed.',
+    fit: 'Works well when note-taking is a recurring drag on delivery.',
+    caution: 'Participants should know recording is happening and sensitive meetings need policy.',
+    url: 'https://fireflies.ai',
+  },
+  {
+    name: 'Otter',
+    category: 'Meetings',
+    useCase: 'Transcription and live notes',
+    pricing: 'Freemium',
+    description: 'Reliable meeting transcription and recap support.',
+    bestFor: 'Lectures, interviews, workshops, and team calls.',
+    fit: 'Good when searchable conversation history matters.',
+    caution: 'Transcript quality still drops in noisy or multilingual environments.',
+    url: 'https://otter.ai',
+  },
+  {
+    name: 'Make',
+    category: 'Automation',
+    useCase: 'Workflow automation',
+    pricing: 'Freemium',
+    description: 'Visual automation builder for connecting apps, AI steps, and operational workflows.',
+    bestFor: 'Routing form entries, summarizing inbound messages, and pushing data between tools.',
+    fit: 'A practical step once the workflow is already understood and repeated often enough.',
+    caution: 'If your process is undefined, Make will automate the mess beautifully.',
+    url: 'https://www.make.com',
+  },
+  {
+    name: 'Zapier',
+    category: 'Automation',
+    useCase: 'Simple app automation',
+    pricing: 'Freemium',
+    description: 'Accessible automation for teams that want quick wins without heavy setup.',
+    bestFor: 'Simple handoffs between forms, email, CRM, and task tools.',
+    fit: 'Best when you want easy automation before moving into more flexible systems.',
+    caution: 'Costs can stack up fast if you build lots of noisy workflows.',
+    url: 'https://zapier.com',
+  },
+  {
+    name: 'Cursor',
+    category: 'Developer',
+    useCase: 'AI-assisted coding',
+    pricing: 'Freemium',
+    description: 'An AI-native editor for coding, refactoring, and working across codebases.',
+    bestFor: 'Developers who want faster iteration and strong code understanding support.',
+    fit: 'Useful when the team already has engineering discipline and wants leverage, not shortcuts.',
+    caution: 'It accelerates good engineering and bad engineering equally.',
+    url: 'https://www.cursor.com',
+  },
+  {
+    name: 'GitHub Copilot',
+    category: 'Developer',
+    useCase: 'Inline coding help',
+    pricing: 'Paid',
+    description: 'Fast inline suggestions and conversational help inside established developer tooling.',
+    bestFor: 'Teams already living inside VS Code or JetBrains tools.',
+    fit: 'Strong for boilerplate, refactors, and everyday coding flow.',
+    caution: 'Inline speed does not remove the need for tests, review, or architectural judgement.',
+    url: 'https://github.com/features/copilot',
+  },
+  {
+    name: 'Notion AI',
+    category: 'Workspace',
+    useCase: 'Knowledge work and internal docs',
+    pricing: 'Paid',
+    description: 'AI inside a workspace many teams already use for notes, docs, and planning.',
+    bestFor: 'Summaries, project notes, writing support, and internal knowledge workflows.',
+    fit: 'Good when your team already runs on Notion and wants assistance inside that context.',
+    caution: 'Do not buy it just because it is built in. Confirm the workflow value first.',
+    url: 'https://www.notion.so/product/ai',
+  },
+];
+
+export const COMPARISONS: Comparison[] = [
+  {
+    category: 'General assistant',
+    decision: 'Choose the one that matches the work, not the internet argument.',
+    toolA: { name: 'ChatGPT', strength: 'Versatility', bestFor: 'Mixed everyday work, reasoning, brainstorming, and drafting.' },
+    toolB: { name: 'Claude', strength: 'Document-heavy work', bestFor: 'Long documents, careful writing, and nuanced summaries.' },
+  },
+  {
+    category: 'Research',
+    decision: 'Use a research tool when you need sources, not just polished answers.',
+    toolA: { name: 'Perplexity', strength: 'Citations and speed', bestFor: 'Source-backed research and fast market scanning.' },
+    toolB: { name: 'ChatGPT', strength: 'Synthesis', bestFor: 'Turning your research into plans, summaries, and decisions.' },
+  },
+  {
+    category: 'Automation',
+    decision: 'Start simple. The workflow matters more than the platform logo.',
+    toolA: { name: 'Zapier', strength: 'Ease of setup', bestFor: 'Straightforward automations and quick wins.' },
+    toolB: { name: 'Make', strength: 'Flexibility', bestFor: 'More complex routing, transformation, and operational logic.' },
+  },
+  {
+    category: 'Coding support',
+    decision: 'Pick based on team workflow, not just demo magic.',
+    toolA: { name: 'Cursor', strength: 'Codebase context', bestFor: 'Pair-programming style workflows and deeper editing tasks.' },
+    toolB: { name: 'GitHub Copilot', strength: 'Inline speed', bestFor: 'Fast coding assistance inside existing editor habits.' },
+  },
+];
+
+export const PROMPTS: Prompt[] = [
+  {
+    id: 'prompt-sales-discovery',
+    title: 'Sales discovery call prep',
+    category: 'Sales',
+    purpose: 'Prepare for a client discovery call with sharper questions and better positioning.',
+    whenToUse: 'Before a first call, proposal meeting, or outbound campaign.',
+    prompt:
+      'You are helping me prepare for a discovery call with a [type of client] in [industry]. Their likely problem is [problem]. Create a call plan with: 1) a short opening, 2) 8 high-signal questions, 3) likely objections, 4) how our offer [offer] could help, and 5) what not to promise too early.',
+    inputs: ['type of client', 'industry', 'problem', 'offer'],
+    output: 'A discovery plan with questions, objection handling, and positioning notes.',
+    tip: 'Use the output to prepare, not to sound robotic on the call.',
+  },
+  {
+    id: 'prompt-email-followup',
+    title: 'Professional follow-up email',
+    category: 'Email',
+    purpose: 'Draft a follow-up that is clear, polite, and actually moves the thread forward.',
+    whenToUse: 'After a meeting, proposal, invoice reminder, or stalled conversation.',
+    prompt:
+      'Draft a concise follow-up email to [person or client] about [topic]. The context is [context]. The goal is [goal]. Keep the tone [tone], include one clear next step, and make the email easy to reply to from a phone.',
+    inputs: ['person or client', 'topic', 'context', 'goal', 'tone'],
+    output: 'A short email draft with a clear ask and professional tone.',
+    tip: 'Add the exact next step you want. Vague follow-ups die in inboxes.',
+  },
+  {
+    id: 'prompt-support-response',
+    title: 'Customer support de-escalation',
+    category: 'Support',
+    purpose: 'Respond to a frustrated customer without sounding defensive or scripted.',
+    whenToUse: 'When a client is unhappy, confused, or escalating a support issue.',
+    prompt:
+      'Draft a response to a customer who is upset about [issue]. Their message said: [paste message]. Acknowledge the frustration, explain what we know so far, avoid blaming language, and offer the next step: [next step]. Keep it calm, human, and clear.',
+    inputs: ['issue', 'customer message', 'next step'],
+    output: 'A support reply that lowers tension and clarifies what happens next.',
+    tip: 'If the customer is right, say so. AI should not be used to dodge accountability.',
+  },
+  {
+    id: 'prompt-marketing-angles',
+    title: 'Campaign angle generator',
+    category: 'Marketing',
+    purpose: 'Generate stronger message angles before writing ads or content.',
+    whenToUse: 'At the start of a campaign, launch, product push, or promo period.',
+    prompt:
+      'I need campaign angles for [product or service] aimed at [audience]. The main promise is [promise]. Generate 5 distinct messaging angles with: target pain point, core idea, headline direction, and why each angle might convert.',
+    inputs: ['product or service', 'audience', 'promise'],
+    output: 'Five clear message angles with rationale and headline direction.',
+    tip: 'Pick one angle and test it properly. More angles is not a strategy by itself.',
+  },
+  {
+    id: 'prompt-planning-priorities',
+    title: 'Weekly priorities and plan',
+    category: 'Planning',
+    purpose: 'Turn scattered tasks into a realistic weekly plan.',
+    whenToUse: 'At the start of the week or when work feels noisy.',
+    prompt:
+      'Act as an operations coach. Here is my list of tasks, deadlines, and constraints: [paste details]. Group them into 1) must-do, 2) should-do, and 3) can-wait. Then give me a practical weekly plan with focus blocks, likely risks, and what I should stop doing.',
+    inputs: ['tasks, deadlines, and constraints'],
+    output: 'A prioritized weekly plan with realistic focus blocks and risks.',
+    tip: 'Feed it the real constraints. Fake capacity creates fake plans.',
+  },
+  {
+    id: 'prompt-research-brief',
+    title: 'Research brief from messy notes',
+    category: 'Research',
+    purpose: 'Turn scattered notes into a clean brief or summary.',
+    whenToUse: 'After interviews, meetings, desk research, or reading sessions.',
+    prompt:
+      'Turn these rough notes into a structured brief. Organize them into: key findings, repeated themes, unanswered questions, risks, and recommended next actions. Keep the language clear enough for a non-technical stakeholder. Notes: [paste notes].',
+    inputs: ['notes'],
+    output: 'A concise research brief with findings, themes, gaps, and next actions.',
+    tip: 'Ask the model to quote or reference the source notes when the detail matters.',
+  },
+  {
+    id: 'prompt-ops-sop',
+    title: 'SOP draft builder',
+    category: 'Operations',
+    purpose: 'Create a first draft of a standard operating procedure from a working process.',
+    whenToUse: 'When a task is repeated often and needs to become trainable.',
+    prompt:
+      'Create a simple SOP for this process: [describe process]. Structure it with purpose, owner, required inputs, step-by-step actions, quality checks, and common mistakes. Keep it usable by a new team member.',
+    inputs: ['process'],
+    output: 'A plain-English SOP draft with steps, checks, and common mistakes.',
+    tip: 'This works best when you describe the real process, not the idealized version.',
+  },
+  {
+    id: 'prompt-code-review',
+    title: 'Code review assistant',
+    category: 'Coding',
+    purpose: 'Review code with focus on bugs, risks, and missing tests instead of style chatter.',
+    whenToUse: 'During PR review, refactors, or before shipping changes.',
+    prompt:
+      'Review the following code like a senior engineer. Focus on bugs, edge cases, regressions, security issues, and missing tests. Ignore trivial style comments unless they hide a real problem. Code: [paste code or diff].',
+    inputs: ['code or diff'],
+    output: 'A prioritized review with concrete findings and test gaps.',
+    tip: 'Ask for findings first. Otherwise the model drifts into generic praise.',
+  },
+  {
+    id: 'prompt-study-tutor',
+    title: 'Study tutor and quiz generator',
+    category: 'Study',
+    purpose: 'Learn a topic actively instead of passively re-reading notes.',
+    whenToUse: 'Before exams, after lectures, or while learning something unfamiliar.',
+    prompt:
+      'Teach me [topic] like a patient tutor. First explain it in simple language, then give me 5 quiz questions, then ask me one question at a time and wait for my answer before correcting me. If I struggle, use a simpler example.',
+    inputs: ['topic'],
+    output: 'An explanation, quiz set, and interactive tutoring flow.',
+    tip: 'Use it to test yourself, not to avoid the actual learning.',
+  },
+];
+
+export const BUILD_TRACKS: BuildTrack[] = [
+  {
+    audience: 'No-code operators',
+    title: 'Automate useful work first',
+    summary: 'Use forms, AI steps, and automations to remove repetitive admin without overbuilding.',
+    outcomes: ['Map one workflow clearly', 'Use AI inside automation carefully', 'Keep approval points visible'],
+  },
+  {
+    audience: 'Developers',
+    title: 'Ship narrow AI products',
+    summary: 'Build assistants, extraction tools, and internal copilots with clear boundaries and real evaluation.',
+    outcomes: ['Scope one use case', 'Handle prompts and tools cleanly', 'Test failure modes'],
+  },
+  {
+    audience: 'Teams',
+    title: 'Build internal operating leverage',
+    summary: 'Create lightweight systems for support, sales, research, and knowledge work.',
+    outcomes: ['Standardize prompts', 'Protect sensitive data', 'Measure adoption properly'],
+  },
+  {
+    audience: 'Founders and product leads',
+    title: 'Find commercial AI opportunities',
+    summary: 'Differentiate between useful AI features and expensive theatre.',
+    outcomes: ['Pick the right wedge', 'Avoid fake assistants', 'Focus on time-to-value'],
+  },
+];
+
+export const BUILD_PRINCIPLES = [
+  'Separate prompt logic, application logic, and tool boundaries.',
+  'Treat AI outputs as proposals until your system proves otherwise.',
+  'Prefer one useful workflow over a vague multi-agent platform.',
+  'Log prompts, failures, and recovery paths where it matters.',
+];
+
+export const BUILD_STARTERS = [
+  'Internal knowledge assistant for policies, SOPs, or onboarding',
+  'Lead qualification workflow for forms, email, or WhatsApp inbound',
+  'Document extraction pipeline for invoices, quotes, or contracts',
+  'Meeting summary and action routing for teams that lose decisions in calls',
+];
+
+export const SERVICE_OFFERS: ServiceOffer[] = [
+  {
+    title: 'AI readiness review',
+    summary: 'A focused assessment of where AI makes sense, where it does not, and what should happen first.',
+    audience: 'Founders, business owners, and department leads.',
+    deliverables: ['Current-state review', 'Priority use cases', 'Risk and guardrail notes'],
+  },
+  {
+    title: 'Team workshops',
+    summary: 'Practical training sessions that help teams use AI better at work without hype or panic.',
+    audience: 'Operations, marketing, support, admin, sales, and mixed teams.',
+    deliverables: ['Live workshop', 'Role-specific examples', 'Reusable prompt pack'],
+  },
+  {
+    title: 'Workflow design and automation',
+    summary: 'Turn repeated work into a defined process, then automate the parts worth automating.',
+    audience: 'Teams losing time to admin, handoffs, and repetitive coordination.',
+    deliverables: ['Workflow mapping', 'Pilot automation plan', 'Implementation guidance'],
+  },
+  {
+    title: 'AI implementation support',
+    summary: 'Help technical and semi-technical teams build lightweight AI systems that can survive contact with reality.',
+    audience: 'Product teams, founders, and technical operators.',
+    deliverables: ['Use-case scoping', 'Stack guidance', 'Review of build approach'],
+  },
+];
+
+export const READINESS_QUESTIONS: ReadinessQuestion[] = [
+  {
+    id: 'goal',
+    question: 'How clear is your reason for adopting AI right now?',
+    options: [
+      { label: 'We mostly do not know. It is vague curiosity or FOMO.', score: 0, note: 'Clarity first.' },
+      { label: 'We have ideas, but they are still broad and unprioritized.', score: 1, note: 'You need focus.' },
+      { label: 'We know a few repeated problems that AI may help with.', score: 2, note: 'Good starting point.' },
+      { label: 'We have a specific workflow or outcome we want to improve.', score: 3, note: 'Strong signal.' },
+    ],
+  },
+  {
+    id: 'process',
+    question: 'How defined are the workflows you want AI to support?',
+    options: [
+      { label: 'They are messy, mostly tribal knowledge, and change constantly.', score: 0, note: 'Document the work first.' },
+      { label: 'We know the process roughly, but it is inconsistent.', score: 1, note: 'Stabilize before scaling.' },
+      { label: 'The workflow is repeatable and partly documented.', score: 2, note: 'Good pilot territory.' },
+      { label: 'The workflow is clear, repeatable, and owned.', score: 3, note: 'Ready for measured automation.' },
+    ],
+  },
+  {
+    id: 'data',
+    question: 'How usable is the information or data the workflow depends on?',
+    options: [
+      { label: 'It is scattered everywhere and hard to trust.', score: 0, note: 'Data cleanup matters.' },
+      { label: 'It exists, but it is inconsistent or hard to access.', score: 1, note: 'Usable with caution.' },
+      { label: 'It is mostly accessible and good enough for pilot work.', score: 2, note: 'You can move.' },
+      { label: 'It is organized, accessible, and reliable.', score: 3, note: 'Strong base.' },
+    ],
+  },
+  {
+    id: 'team',
+    question: 'How ready is the team that would use or manage the AI workflow?',
+    options: [
+      { label: 'They are anxious, confused, or resistant.', score: 0, note: 'Training first.' },
+      { label: 'A few people are curious, but there is no shared practice.', score: 1, note: 'Early-stage readiness.' },
+      { label: 'There are active users and some emerging champions.', score: 2, note: 'Promising foundation.' },
+      { label: 'The team already uses AI responsibly in day-to-day work.', score: 3, note: 'Good operating base.' },
+    ],
+  },
+  {
+    id: 'risk',
+    question: 'How well do you understand the risks around privacy, quality, and human review?',
+    options: [
+      { label: 'We have not thought about that much yet.', score: 0, note: 'Do not rush implementation.' },
+      { label: 'We know there are risks, but no clear guardrails exist.', score: 1, note: 'Guardrails needed.' },
+      { label: 'We know where review is needed and what data is sensitive.', score: 2, note: 'Reasonable baseline.' },
+      { label: 'We have clear approval points, data boundaries, and ownership.', score: 3, note: 'Healthy discipline.' },
+    ],
+  },
+];
+
+export const READINESS_BANDS: ReadinessBand[] = [
+  {
+    name: 'Not ready yet',
+    min: 0,
+    max: 24,
+    summary: 'You should not be buying a stack or automating core workflows yet. Start with clarity, training, and process cleanup.',
+    priorities: ['Define the real goal', 'Document repeated workflows', 'Train key people first'],
+    recommendation: 'Start with a readiness review or beginner team workshop.',
+  },
+  {
+    name: 'Emerging',
+    min: 25,
+    max: 49,
+    summary: 'You have intent, but not enough operational clarity yet. Pilot work is possible if it stays tightly scoped.',
+    priorities: ['Pick one narrow use case', 'Create guardrails', 'Improve data access'],
+    recommendation: 'Run one low-risk pilot before expanding.',
+  },
+  {
+    name: 'Operationally promising',
+    min: 50,
+    max: 74,
+    summary: 'You have enough structure to run useful pilots and early automation if ownership stays clear.',
+    priorities: ['Measure quality and adoption', 'Create repeatable prompts', 'Formalize review steps'],
+    recommendation: 'Pilot a real workflow and track time saved plus error rate.',
+  },
+  {
+    name: 'Ready to scale carefully',
+    min: 75,
+    max: 100,
+    summary: 'You can move beyond experimentation, provided the rollout stays disciplined and measured.',
+    priorities: ['Standardize successful workflows', 'Expand with governance', 'Build for maintainability'],
+    recommendation: 'Scale proven workflows and consider deeper implementation support.',
+  },
+];
+
+export const FOOTER_LINK_GROUPS: FooterLinkGroup[] = [
+  {
+    title: 'Explore',
+    links: [
+      { label: 'Learn', path: '/learn' },
+      { label: 'Use', path: '/use' },
+      { label: 'Choose', path: '/choose' },
+      { label: 'Build', path: '/build' },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { label: 'Prompt Library', path: '/prompts' },
+      { label: 'AI Readiness Test', path: '/readiness-test' },
+      { label: 'Training and Consulting', path: '/training' },
+    ],
+  },
 ];

@@ -1,173 +1,251 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Wrench, ExternalLink, Search, Filter, ArrowRight } from 'lucide-react';
-import { TOOLS, COMPARISONS } from '../constants';
+import { Helmet } from 'react-helmet-async';
+import { ArrowRight, ExternalLink, Search, ShieldCheck, SlidersHorizontal } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ContinueJourney, JourneyCompass } from '../components/Journey';
+import { PageQuickNav } from '../components/PageQuickNav';
+import { COMPARISONS, TOOLS } from '../constants';
 import { cn } from '../lib/utils';
 
 export const Tools = () => {
   const [search, setSearch] = React.useState('');
-  const [category, setCategory] = React.useState('All');
+  const [selectedUseCase, setSelectedUseCase] = React.useState('All use cases');
 
-  const categories = ['All', ...new Set(TOOLS.map(t => t.category))];
+  const useCases = ['All use cases', ...new Set(TOOLS.map((tool) => tool.useCase))];
 
-  const filteredTools = TOOLS.filter(tool => {
-    const matchesSearch = tool.name.toLowerCase().includes(search.toLowerCase()) || 
-                         tool.description.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory = category === 'All' || tool.category === category;
-    return matchesSearch && matchesCategory;
+  const filteredTools = TOOLS.filter((tool) => {
+    const query = search.toLowerCase();
+    const matchesSearch =
+      tool.name.toLowerCase().includes(query) ||
+      tool.description.toLowerCase().includes(query) ||
+      tool.bestFor.toLowerCase().includes(query) ||
+      tool.useCase.toLowerCase().includes(query);
+    const matchesUseCase = selectedUseCase === 'All use cases' || tool.useCase === selectedUseCase;
+
+    return matchesSearch && matchesUseCase;
   });
 
   return (
-    <div className="pt-24 pb-24 bg-[#E4E3E0]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <header className="max-w-3xl mb-16">
-          <span className="font-mono text-xs uppercase tracking-widest text-[#F27D26] mb-4 block">Toolstack</span>
-          <h1 className="text-6xl font-bold tracking-tighter text-[#141414] mb-6">The Right Tools.</h1>
-          <p className="text-xl text-[#141414]/70 font-serif italic">
-            No affiliate sludge. Just real tools compared in plain English so you know what to use for what.
-          </p>
-        </header>
+    <div className="px-4 pb-20 pt-28 sm:px-6 lg:px-8">
+      <Helmet>
+        <title>Choose AI tools | ABCAI</title>
+        <meta
+          name="description"
+          content="Choose AI tools by real use case, pricing, fit, and tradeoffs instead of hype-driven lists."
+        />
+      </Helmet>
 
-        {/* Head-to-Head Comparison Table */}
-        <section className="mb-24">
-          <div className="bg-[#141414] rounded-[2rem] p-8 md:p-12 text-[#E4E3E0]">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-              <div>
-                <span className="font-mono text-[10px] uppercase tracking-widest text-[#F27D26] mb-2 block">Comparison Guide</span>
-                <h2 className="text-4xl font-bold tracking-tight">Head-to-Head.</h2>
-              </div>
-              <p className="text-[#E4E3E0]/60 max-w-sm text-sm">
-                The AI market is crowded. Here is how the top players stack up in the categories that matter most.
-              </p>
+      <div className="mx-auto max-w-7xl">
+        <JourneyCompass page="choose" />
+        <PageQuickNav
+          title="Jump through the tool decision flow"
+          items={[
+            { id: 'tool-comparisons', label: 'Head-to-head', description: 'See the fast comparisons for common tool debates.' },
+            { id: 'tool-directory', label: 'Tool directory', description: 'Skip to the searchable list and start filtering.' },
+            { id: 'tool-next-move', label: 'Next move', description: 'Jump to what comes after tool choice.' },
+          ]}
+        />
+
+        <header className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-strong)]">
+              Choose
+            </p>
+            <h1 className="mt-2 text-5xl font-semibold tracking-[-0.06em] sm:text-6xl">Choose tools by job, not hype.</h1>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-[color:var(--muted)]">
+              The AI tool market is crowded and noisy. ABCAI compares tools in plain English so you can decide based on
+              use case, budget, team fit, and where the hidden cost lives.
+            </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-[color:var(--line)] bg-white p-6 sm:p-8">
+            <div className="flex items-center gap-3">
+              <ShieldCheck className="h-6 w-6 text-[color:var(--accent)]" />
+              <h2 className="text-2xl font-semibold tracking-[-0.04em]">Three rules for tool decisions</h2>
             </div>
-
-            <div className="grid grid-cols-1 gap-4">
-              {/* Table Header */}
-              <div className="hidden md:grid grid-cols-4 gap-4 px-6 py-4 border-b border-[#E4E3E0]/10 text-[10px] font-mono uppercase tracking-widest text-[#E4E3E0]/40">
-                <div>Category</div>
-                <div>Option A</div>
-                <div>Option B</div>
-                <div>The Verdict</div>
-              </div>
-
-              {/* Table Rows */}
-              {COMPARISONS.map((comp, idx) => (
-                <motion.div
-                  key={comp.category}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="bg-[#E4E3E0]/5 rounded-2xl p-6 md:p-0 md:bg-transparent md:grid md:grid-cols-4 md:gap-4 md:px-6 md:py-8 border-b border-[#E4E3E0]/5 last:border-0 hover:bg-[#E4E3E0]/10 transition-colors"
-                >
-                  <div className="mb-4 md:mb-0">
-                    <span className="md:hidden text-[10px] font-mono uppercase text-[#F27D26] block mb-1">Category</span>
-                    <span className="font-bold text-lg md:text-base">{comp.category}</span>
-                  </div>
-                  
-                  <div className="mb-4 md:mb-0">
-                    <span className="md:hidden text-[10px] font-mono uppercase text-[#E4E3E0]/40 block mb-1">Option A</span>
-                    <div className="flex flex-col">
-                      <span className="font-bold text-[#F27D26]">{comp.toolA.name}</span>
-                      <span className="text-xs text-[#E4E3E0]/60 italic">{comp.toolA.strength}</span>
-                    </div>
-                  </div>
-
-                  <div className="mb-4 md:mb-0">
-                    <span className="md:hidden text-[10px] font-mono uppercase text-[#E4E3E0]/40 block mb-1">Option B</span>
-                    <div className="flex flex-col">
-                      <span className="font-bold text-[#F27D26]">{comp.toolB.name}</span>
-                      <span className="text-xs text-[#E4E3E0]/60 italic">{comp.toolB.strength}</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <span className="md:hidden text-[10px] font-mono uppercase text-[#E4E3E0]/40 block mb-1">Verdict</span>
-                    <p className="text-sm text-[#E4E3E0]/80 leading-relaxed">
-                      Use <span className="text-white font-bold">{comp.toolA.name}</span> for {comp.toolA.bestFor.split('.')[0]}. 
-                      Switch to <span className="text-white font-bold">{comp.toolB.name}</span> when you need {comp.toolB.bestFor.split('.')[0]}.
-                    </p>
-                  </div>
-                </motion.div>
+            <div className="mt-6 space-y-4 text-sm leading-6 text-[color:var(--ink)]/82">
+              {[
+                'Define the task before choosing the tool.',
+                'Prefer one tool that covers real work over five overlapping subscriptions.',
+                'Ask what review, privacy, and setup cost comes with the tool.',
+              ].map((item) => (
+                <div key={item} className="rounded-2xl bg-[color:var(--surface-strong)] p-4">
+                  {item}
+                </div>
               ))}
             </div>
           </div>
-        </section>
+        </header>
 
-        {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-4 mb-12">
-          <div className="relative flex-grow">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#141414]/30" size={18} />
-            <input
-              type="text"
-              placeholder="Search tools..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-white rounded-xl border border-[#141414]/5 focus:outline-none focus:ring-2 focus:ring-[#F27D26]/20"
-            />
+        <section id="tool-comparisons" className="mt-12 rounded-[2.5rem] bg-[color:var(--ink)] px-6 py-10 text-[color:var(--paper)] sm:px-8 lg:px-10">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:rgba(248,244,238,0.5)]">
+                Head-to-head
+              </p>
+              <h2 className="mt-2 text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
+                Fast decisions for common tool debates
+              </h2>
+            </div>
+            <p className="max-w-xl text-sm leading-6 text-[color:rgba(248,244,238,0.72)]">
+              These are decision shortcuts, not absolute truths. The best tool is the one that fits the work and the
+              team using it.
+            </p>
           </div>
-          <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
-            {categories.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setCategory(cat)}
-                className={cn(
-                  "px-6 py-4 rounded-xl text-sm font-medium whitespace-nowrap transition-colors",
-                  category === cat 
-                    ? "bg-[#141414] text-[#E4E3E0]" 
-                    : "bg-white text-[#141414] hover:bg-[#141414]/5"
-                )}
-              >
-                {cat}
-              </button>
+
+          <div className="mt-8 grid gap-5 lg:grid-cols-2">
+            {COMPARISONS.map((comparison) => (
+              <div key={comparison.category} className="rounded-[1.8rem] border border-white/10 bg-white/5 p-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:rgba(248,244,238,0.48)]">
+                  {comparison.category}
+                </p>
+                <p className="mt-3 text-sm leading-6 text-[color:rgba(248,244,238,0.82)]">{comparison.decision}</p>
+                <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                  {[comparison.toolA, comparison.toolB].map((tool) => (
+                    <div key={tool.name} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                      <h3 className="text-lg font-semibold">{tool.name}</h3>
+                      <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--accent)]">
+                        {tool.strength}
+                      </p>
+                      <p className="mt-3 text-sm leading-6 text-[color:rgba(248,244,238,0.72)]">{tool.bestFor}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* Tools Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredTools.map((tool, idx) => (
-            <motion.div
-              key={tool.name}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: idx * 0.05 }}
-              className="bg-white rounded-2xl p-8 border border-[#141414]/5 flex flex-col group"
-            >
-              <div className="flex justify-between items-start mb-6">
-                <div className="bg-[#141414]/5 p-3 rounded-lg">
-                  <Wrench size={24} className="text-[#141414]" />
+        <section id="tool-directory" className="mt-16">
+          <div className="rounded-[2rem] border border-[color:var(--line)] bg-white p-5 sm:p-6">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+              <div className="relative flex-1">
+                <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--muted)]" />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                  placeholder="Search by tool, use case, or what you need help with"
+                  className="w-full rounded-2xl border border-[color:var(--line)] bg-[color:var(--surface)] py-3.5 pl-11 pr-4 text-sm outline-none focus:border-[color:var(--accent)]"
+                />
+              </div>
+              <div className="flex items-center gap-3 overflow-x-auto pb-1">
+                <div className="inline-flex items-center rounded-full border border-[color:var(--line)] px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--muted)]">
+                  <SlidersHorizontal className="mr-2 h-4 w-4" />
+                  Use case
                 </div>
-                <span className={cn(
-                  "text-[10px] font-mono uppercase tracking-widest px-2 py-1 rounded",
-                  tool.price === 'Free' ? "bg-green-100 text-green-700" :
-                  tool.price === 'Freemium' ? "bg-blue-100 text-blue-700" :
-                  "bg-orange-100 text-orange-700"
-                )}>
-                  {tool.price}
-                </span>
+                {useCases.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() => setSelectedUseCase(item)}
+                    className={cn(
+                      'whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium',
+                      selectedUseCase === item
+                        ? 'bg-[color:var(--ink)] text-[color:var(--paper)]'
+                        : 'bg-[color:var(--surface-strong)] text-[color:var(--ink)] hover:bg-[color:var(--surface)]'
+                    )}
+                  >
+                    {item}
+                  </button>
+                ))}
               </div>
-              
-              <h3 className="text-2xl font-bold text-[#141414] mb-2">{tool.name}</h3>
-              <span className="text-xs font-mono text-[#F27D26] mb-4 block uppercase tracking-wider">{tool.category}</span>
-              <p className="text-sm text-[#141414]/60 mb-6 flex-grow">{tool.description}</p>
-              
-              <div className="pt-6 border-t border-[#141414]/5">
-                <h4 className="text-[10px] font-bold uppercase text-[#141414]/40 mb-2 tracking-widest">Best For</h4>
-                <p className="text-xs font-medium text-[#141414]/80 mb-6">{tool.bestFor}</p>
-                <a
-                  href={tool.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-full py-3 rounded-lg border border-[#141414] text-[#141414] font-bold text-sm hover:bg-[#141414] hover:text-[#E4E3E0] transition-all group"
-                >
-                  Visit Tool
-                  <ExternalLink size={14} className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </a>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+            </div>
+          </div>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {filteredTools.map((tool, index) => (
+              <motion.div
+                key={tool.name}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.04 }}
+                className="rounded-[2rem] border border-[color:var(--line)] bg-white p-6"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-strong)]">
+                      {tool.useCase}
+                    </p>
+                    <h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em]">{tool.name}</h2>
+                  </div>
+                  <span className="rounded-full border border-[color:var(--line)] px-3 py-1 text-xs font-medium text-[color:var(--ink)]/72">
+                    {tool.pricing}
+                  </span>
+                </div>
+                <p className="mt-4 text-sm leading-6 text-[color:var(--muted)]">{tool.description}</p>
+                <div className="mt-5 rounded-2xl bg-[color:var(--surface-strong)] p-4 text-sm leading-6 text-[color:var(--ink)]/82">
+                  <span className="font-semibold">Best for:</span> {tool.bestFor}
+                </div>
+                <div className="mt-4 text-sm leading-6 text-[color:var(--ink)]/78">
+                  <span className="font-semibold">Why it fits:</span> {tool.fit}
+                </div>
+                <div className="mt-3 text-sm leading-6 text-[color:var(--accent-strong)]">
+                  <span className="font-semibold">Watch out for:</span> {tool.caution}
+                </div>
+                <div className="mt-6 flex items-center justify-between">
+                  <span className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--muted)]">
+                    {tool.category}
+                  </span>
+                  <a
+                    href={tool.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center text-sm font-semibold text-[color:var(--accent-strong)]"
+                  >
+                    Visit tool
+                    <ExternalLink className="ml-2 h-4 w-4" />
+                  </a>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {filteredTools.length === 0 && (
+            <div className="mt-8 rounded-[2rem] border border-dashed border-[color:var(--line-strong)] bg-white/70 p-8 text-center">
+              <h3 className="text-2xl font-semibold tracking-[-0.04em]">No tools matched that filter.</h3>
+              <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">
+                Try a different use case, or search for the job you want done instead of the tool name.
+              </p>
+            </div>
+          )}
+        </section>
+
+        <section id="tool-next-move" className="mt-16 rounded-[2rem] border border-[color:var(--line)] bg-white p-6 sm:p-8">
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-strong)]">
+                Next move
+              </p>
+              <h2 className="mt-2 text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
+                After tool choice, focus on usage quality
+              </h2>
+            </div>
+            <p className="max-w-xl text-sm leading-6 text-[color:var(--muted)]">
+              Buying the tool is the easy part. The harder part is prompting well, defining good outputs, and keeping
+              review responsibility visible.
+            </p>
+          </div>
+
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Link
+              to="/prompts"
+              className="inline-flex items-center rounded-full bg-[color:var(--ink)] px-6 py-3.5 text-sm font-semibold text-[color:var(--paper)] hover:bg-[color:var(--accent-strong)]"
+            >
+              Browse prompt library
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+            <Link
+              to="/training"
+              className="inline-flex items-center rounded-full border border-[color:var(--line-strong)] bg-white px-6 py-3.5 text-sm font-semibold text-[color:var(--ink)] hover:bg-[color:var(--surface-strong)]"
+            >
+              Get team help choosing a stack
+            </Link>
+          </div>
+        </section>
+
+        <ContinueJourney page="choose" />
       </div>
     </div>
   );

@@ -1,74 +1,128 @@
 import React from 'react';
+import { ArrowRight, Mail, Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronRight, Zap, BookOpen, Briefcase, Wrench, Library, MessageSquare, GraduationCap } from 'lucide-react';
+import { useJourneyProfile } from './JourneyProfile';
+import { FOOTER_LINK_GROUPS, NAV_ITEMS } from '../constants';
 import { cn } from '../lib/utils';
+import type { JourneyProfileId } from '../types';
+
+const getJourneyProfileForPath = (path: string): JourneyProfileId => {
+  if (path === '/build') {
+    return 'builder';
+  }
+
+  if (path === '/learn' || path === '/prompts') {
+    return 'beginner';
+  }
+
+  return 'business';
+};
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const location = useLocation();
+  const { setProfile } = useJourneyProfile();
 
-  const navItems = [
-    { name: 'Start Here', path: '/start', icon: Zap },
-    { name: 'AI for Business', path: '/business', icon: Briefcase },
-    { name: 'Learning Paths', path: '/roles', icon: GraduationCap },
-    { name: 'AI Tools', path: '/tools', icon: Wrench },
-    { name: 'Prompt Library', path: '/prompts', icon: Library },
-  ];
+  React.useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-[#E4E3E0]/80 backdrop-blur-md border-b border-[#141414]/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          <Link to="/" className="flex items-center space-x-2">
-            <span className="font-bold text-2xl tracking-tighter text-[#141414]">ABC<span className="text-[#F27D26]">AI</span></span>
-          </Link>
+    <nav className="fixed inset-x-0 top-0 z-50 border-b border-[color:var(--line)] bg-[color:rgba(248,244,238,0.92)] backdrop-blur-xl">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8">
+        <Link to="/" className="flex min-w-0 items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[color:var(--ink)] text-sm font-semibold tracking-[0.2em] text-[color:var(--paper)]">
+            AI
+          </div>
+          <div className="min-w-0">
+            <div className="text-lg font-semibold tracking-[-0.04em] text-[color:var(--ink)]">ABCAI</div>
+            <div className="hidden text-xs text-[color:var(--muted)] sm:block">Learn AI. Use AI. Build Better.</div>
+          </div>
+        </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
+        <div className="hidden items-center gap-1 lg:flex">
+          {NAV_ITEMS.map((item) => {
+            const isActive = location.pathname === item.path;
+
+            return (
               <Link
                 key={item.path}
                 to={item.path}
+                onClick={() => setProfile(getJourneyProfileForPath(item.path))}
                 className={cn(
-                  "text-sm font-medium transition-colors hover:text-[#F27D26]",
-                  location.pathname === item.path ? "text-[#F27D26]" : "text-[#141414]/70"
+                  'rounded-full px-4 py-2 text-sm font-medium transition-colors',
+                  isActive
+                    ? 'bg-[color:var(--ink)] text-[color:var(--paper)]'
+                    : 'text-[color:var(--ink)]/80 hover:bg-[color:var(--surface-strong)] hover:text-[color:var(--ink)]'
                 )}
               >
-                {item.name}
+                {item.label}
               </Link>
-            ))}
-            <Link
-              to="/training"
-              className="bg-[#141414] text-[#E4E3E0] px-4 py-2 rounded-full text-sm font-medium hover:bg-[#F27D26] transition-colors"
-            >
-              Get Started
-            </Link>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button onClick={() => setIsOpen(!isOpen)} className="text-[#141414]">
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
+            );
+          })}
         </div>
+
+        <div className="hidden items-center gap-3 lg:flex">
+          <Link
+            to="/readiness-test"
+            onClick={() => setProfile('business')}
+            className="rounded-full border border-[color:var(--line-strong)] px-4 py-2 text-sm font-medium text-[color:var(--ink)] transition-colors hover:bg-[color:var(--surface-strong)]"
+          >
+            Readiness test
+          </Link>
+          <Link
+            to="/training"
+            onClick={() => setProfile('business')}
+            className="inline-flex items-center rounded-full bg-[color:var(--ink)] px-5 py-2.5 text-sm font-semibold text-[color:var(--paper)] transition-colors hover:bg-[color:var(--accent-strong)]"
+          >
+            Team training
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
+        </div>
+
+        <button
+          type="button"
+          aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--line)] text-[color:var(--ink)] lg:hidden"
+          onClick={() => setIsOpen((value) => !value)}
+        >
+          {isOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
       </div>
 
-      {/* Mobile Nav */}
       {isOpen && (
-        <div className="md:hidden bg-[#E4E3E0] border-b border-[#141414]/10">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {navItems.map((item) => (
+        <div className="border-t border-[color:var(--line)] bg-[color:var(--paper)] lg:hidden">
+          <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
+            <div className="grid gap-2">
+              {NAV_ITEMS.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setProfile(getJourneyProfileForPath(item.path))}
+                  className="rounded-2xl border border-[color:var(--line)] px-4 py-3"
+                >
+                  <div className="text-sm font-semibold text-[color:var(--ink)]">{item.label}</div>
+                  <div className="mt-1 text-sm text-[color:var(--muted)]">{item.description}</div>
+                </Link>
+              ))}
+            </div>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setIsOpen(false)}
-                className="flex items-center space-x-3 px-3 py-2 rounded-md text-base font-medium text-[#141414] hover:bg-[#141414]/5"
+                to="/readiness-test"
+                onClick={() => setProfile('business')}
+                className="rounded-2xl border border-[color:var(--line-strong)] px-4 py-3 text-sm font-medium text-[color:var(--ink)]"
               >
-                <item.icon size={18} />
-                <span>{item.name}</span>
+                Take the readiness test
               </Link>
-            ))}
+              <Link
+                to="/training"
+                onClick={() => setProfile('business')}
+                className="rounded-2xl bg-[color:var(--ink)] px-4 py-3 text-sm font-semibold text-[color:var(--paper)]"
+              >
+                Book training or consulting
+              </Link>
+            </div>
           </div>
         </div>
       )}
@@ -76,41 +130,70 @@ export const Navbar = () => {
   );
 };
 
-export const Footer = () => (
-  <footer className="bg-[#141414] text-[#E4E3E0] py-12">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div className="col-span-1 md:col-span-2">
-          <span className="font-bold text-2xl tracking-tighter">ABC<span className="text-[#F27D26]">AI</span></span>
-          <p className="mt-4 text-[#E4E3E0]/60 max-w-sm">
-            Practical AI education for real people. From basics to business growth, we help South Africans navigate the AI revolution.
-          </p>
+export const Footer = () => {
+  const { setProfile } = useJourneyProfile();
+
+  return (
+    <footer className="border-t border-[color:var(--line)] bg-[color:var(--ink)] text-[color:var(--paper)]">
+      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div className="grid gap-12 lg:grid-cols-[1.3fr_repeat(3,0.7fr)]">
+          <div>
+            <div className="text-3xl font-semibold tracking-[-0.05em]">ABCAI</div>
+            <p className="mt-4 max-w-md text-sm leading-6 text-[color:rgba(244,241,236,0.72)]">
+              Practical AI learning and adoption for South Africa. Clear guidance for people who need useful
+              answers, better workflows, and credible next steps.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3 text-sm text-[color:rgba(244,241,236,0.72)]">
+              <span className="rounded-full border border-white/10 px-3 py-1">South African-first framing</span>
+              <span className="rounded-full border border-white/10 px-3 py-1">Business and team adoption</span>
+              <span className="rounded-full border border-white/10 px-3 py-1">Beginner to builder</span>
+            </div>
+          </div>
+
+          {FOOTER_LINK_GROUPS.map((group) => (
+            <div key={group.title}>
+              <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-[color:rgba(244,241,236,0.44)]">
+                {group.title}
+              </h3>
+              <ul className="mt-4 space-y-3">
+                {group.links.map((link) => (
+                  <li key={link.path}>
+                    <Link
+                      to={link.path}
+                      onClick={() => setProfile(getJourneyProfileForPath(link.path))}
+                      className="text-sm text-[color:rgba(244,241,236,0.78)] transition-colors hover:text-white"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-[color:rgba(244,241,236,0.44)]">
+              Contact
+            </h3>
+            <div className="mt-4 space-y-3 text-sm text-[color:rgba(244,241,236,0.78)]">
+              <a href="mailto:hello@abcai.co.za" className="inline-flex items-center transition-colors hover:text-white">
+                <Mail className="mr-2 h-4 w-4" />
+                hello@abcai.co.za
+              </a>
+              <p>Remote-first, built for South Africa.</p>
+              <p>Workshops, readiness reviews, and practical implementation support.</p>
+            </div>
+          </div>
         </div>
-        <div>
-          <h3 className="font-serif italic text-lg mb-4">Quick Links</h3>
-          <ul className="space-y-2 text-sm text-[#E4E3E0]/60">
-            <li><Link to="/start" className="hover:text-[#F27D26]">Start Here</Link></li>
-            <li><Link to="/business" className="hover:text-[#F27D26]">AI for Business</Link></li>
-            <li><Link to="/tools" className="hover:text-[#F27D26]">Toolstack</Link></li>
-            <li><Link to="/prompts" className="hover:text-[#F27D26]">Prompt Library</Link></li>
-          </ul>
-        </div>
-        <div>
-          <h3 className="font-serif italic text-lg mb-4">Connect</h3>
-          <ul className="space-y-2 text-sm text-[#E4E3E0]/60">
-            <li><Link to="/training" className="hover:text-[#F27D26]">Consulting</Link></li>
-            <li><Link to="/training" className="hover:text-[#F27D26]">Workshops</Link></li>
-            <li><a href="mailto:hello@abcai.co.za" className="hover:text-[#F27D26]">Email Us</a></li>
-          </ul>
+
+        <div className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-[color:rgba(244,241,236,0.52)] sm:flex-row sm:items-center sm:justify-between">
+          <p>© 2026 ABCAI. Practical AI for people who need clarity, not noise.</p>
+          <div className="flex gap-4">
+            <span>abcai.co.za</span>
+            <span>Learn AI. Use AI. Build Better.</span>
+          </div>
         </div>
       </div>
-      <div className="mt-12 pt-8 border-t border-[#E4E3E0]/10 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="text-xs text-[#E4E3E0]/40">© 2026 ABCAI. Practical AI for Real People.</p>
-        <div className="flex space-x-6 text-xs text-[#E4E3E0]/40">
-          <Link to="#" className="hover:text-[#F27D26]">Privacy Policy</Link>
-          <Link to="#" className="hover:text-[#F27D26]">Terms of Service</Link>
-        </div>
-      </div>
-    </div>
-  </footer>
-);
+    </footer>
+  );
+};
