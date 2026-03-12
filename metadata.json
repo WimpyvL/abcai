@@ -1,0 +1,7 @@
+{
+  "name": "ABCAI - Practical AI Education",
+  "description": "Learn AI. Use AI. Build Better. The practical guide to AI for South African businesses, creators, and students.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
