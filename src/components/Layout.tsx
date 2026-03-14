@@ -11,7 +11,7 @@ const getJourneyProfileForPath = (path: string): JourneyProfileId => {
     return 'builder';
   }
 
-  if (path === '/learn' || path === '/prompts') {
+  if (path === '/learn' || path === '/prompts' || path.startsWith('/courses')) {
     return 'beginner';
   }
 

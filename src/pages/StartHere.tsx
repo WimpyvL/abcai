@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { ContinueJourney } from '../components/Journey';
 import { useJourneyProfile } from '../components/JourneyProfile';
 import { PageUtilityRail } from '../components/PageUtilityRail';
+import { FEATURED_COURSES } from '../courseData';
 import { AUDIENCE_PATHS, FEATURED_GUIDES } from '../constants';
 
 const getProfileForPath = (path: string) => {
@@ -12,7 +13,7 @@ const getProfileForPath = (path: string) => {
     return 'builder';
   }
 
-  if (path === '/learn' || path === '/prompts') {
+  if (path === '/learn' || path === '/prompts' || path.startsWith('/courses')) {
     return 'beginner';
   }
 
@@ -40,6 +41,7 @@ export const StartHere = () => {
             items: [
               { id: 'learning-paths', label: 'Starting paths', description: 'Go straight to the entry path that matches your current goal.' },
               { id: 'first-week-plan', label: 'First-week plan', description: 'See the clean sequence for your first useful week with AI.' },
+              { id: 'structured-courses', label: 'Structured courses', description: 'Jump to the guided tracks if you want more than browsing.' },
               { id: 'beginner-cautions', label: 'What to avoid', description: 'Skip to the mistakes that catch beginners fastest.' },
               { id: 'learn-next', label: 'Learn next', description: 'Move into the next resources once the basics are clear.' },
             ],
@@ -189,6 +191,60 @@ export const StartHere = () => {
               ))}
             </div>
           </div>
+        </section>
+
+        <section id="structured-courses" className="mt-16 rounded-[2.2rem] border border-[color:var(--line)] bg-white/84 p-6 shadow-[0_20px_52px_rgba(23,33,39,0.05)] sm:p-8">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--accent-strong)]">
+                Structured courses
+              </p>
+              <h2 className="mt-2 text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
+                If you want more than browsing, take a guided track
+              </h2>
+            </div>
+            <p className="max-w-xl text-sm leading-6 text-[color:var(--muted)]">
+              ABCAI courses are for people who want sequence, exercises, and a clean path from understanding into real
+              use. No content swamp. Just deliberate progression.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-5 lg:grid-cols-2">
+            {FEATURED_COURSES.slice(0, 2).map((course) => (
+              <Link
+                key={course.slug}
+                to={`/courses/${course.slug}`}
+                onClick={() => setProfile(course.journeyProfile)}
+                className="group rounded-[1.9rem] border border-[color:var(--line)] bg-[color:var(--surface)] p-6 transition-colors hover:border-[color:var(--accent)] hover:bg-white"
+              >
+                <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--accent-strong)]">
+                  <span>{course.level}</span>
+                  <span className="text-[color:var(--muted)]">•</span>
+                  <span>{course.duration}</span>
+                  <span className="text-[color:var(--muted)]">•</span>
+                  <span>{course.format}</span>
+                </div>
+                <h3 className="mt-4 text-2xl font-semibold tracking-[-0.04em]">{course.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-[color:var(--muted)]">{course.summary}</p>
+                <div className="mt-5 rounded-2xl bg-white px-4 py-3 text-sm leading-6 text-[color:var(--ink)]/82">
+                  {course.highlight}
+                </div>
+                <div className="mt-6 inline-flex items-center text-sm font-semibold text-[color:var(--accent-strong)]">
+                  Open course
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <Link
+            to="/courses"
+            onClick={() => setProfile('beginner')}
+            className="mt-8 inline-flex items-center text-sm font-semibold text-[color:var(--accent-strong)]"
+          >
+            Browse the full course catalog
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
         </section>
 
         <section id="learn-next" className="mt-16">

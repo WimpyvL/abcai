@@ -20,9 +20,14 @@ export const Training = () => {
 
   React.useEffect(() => {
     const requestedService = searchParams.get('service');
+    const requestedContext = searchParams.get('context');
 
     if (requestedService && SERVICE_OFFERS.some((offer) => offer.title === requestedService)) {
       setService(requestedService);
+    }
+
+    if (requestedContext) {
+      setMessage(requestedContext);
     }
   }, [searchParams]);
 

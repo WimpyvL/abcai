@@ -13,14 +13,16 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useJourneyProfile } from '../components/JourneyProfile';
+import { FEATURED_COURSES } from '../courseData';
 import { AUDIENCE_PATHS, FEATURED_GUIDES, SIGNATURE_QUESTIONS } from '../constants';
 import { cn } from '../lib/utils';
 
 const HOME_PATHS = AUDIENCE_PATHS.filter((path) => ['new', 'business', 'automate', 'build'].includes(path.id));
 const STARTING_POINTS = FEATURED_GUIDES.filter((guide) =>
-  ['Start here', 'Business', 'Tools', 'Prompts'].includes(guide.category)
+  ['Start here', 'Business', 'Tools'].includes(guide.category)
 );
 const PROOF_POINTS = SIGNATURE_QUESTIONS.slice(0, 3);
+const FEATURED_COURSE = FEATURED_COURSES[0];
 
 const pathIcons = {
   new: BookOpen,
@@ -53,6 +55,7 @@ const WHY_ABCAI = [
 
 const HERO_SIGNALS = [
   'Clear AI learning without hype',
+  'Structured courses for learners and teams',
   'Use-case-first tools and prompts',
   'Readiness, training, and implementation paths',
 ];
@@ -77,6 +80,7 @@ const HERO_STEPS = [
 
 const PREVIEW_LINKS = [
   { label: 'Learn', path: '/learn' },
+  { label: 'Courses', path: '/courses' },
   { label: 'Use', path: '/use' },
   { label: 'Choose', path: '/choose' },
   { label: 'Build', path: '/build' },
@@ -226,6 +230,15 @@ export const Home = () => {
                     <Link
                       key={item.label}
                       to={item.path}
+                      onClick={() =>
+                        setProfile(
+                          item.path === '/build'
+                            ? 'builder'
+                            : item.path === '/use' || item.path === '/choose'
+                              ? 'business'
+                              : 'beginner'
+                        )
+                      }
                       className="rounded-full border border-[color:var(--line)] bg-[color:var(--surface)] px-3 py-1.5 text-sm font-medium text-[color:var(--ink)] hover:border-[color:var(--accent)]"
                     >
                       {item.label}
@@ -407,6 +420,32 @@ export const Home = () => {
                   </Link>
                 );
               })}
+
+              <Link
+                to="/courses"
+                onClick={() => setProfile(FEATURED_COURSE?.journeyProfile ?? 'beginner')}
+                className="group rounded-[1.9rem] border border-[color:rgba(23,65,63,0.16)] bg-[linear-gradient(180deg,rgba(23,65,63,0.96),rgba(23,33,39,0.96))] p-6 text-[color:var(--paper)] hover:border-[color:var(--accent)] hover:shadow-[0_18px_42px_rgba(23,33,39,0.12)]"
+              >
+                <BookOpen className="h-6 w-6 text-[color:var(--accent)]" />
+                <p className="mt-5 text-xs font-semibold uppercase tracking-[0.16em] text-[color:rgba(248,244,238,0.52)]">
+                  Courses
+                </p>
+                <h3 className="mt-2 text-2xl font-semibold tracking-[-0.04em]">
+                  {FEATURED_COURSE?.title ?? 'Structured AI courses'}
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-[color:rgba(248,244,238,0.78)]">
+                  {FEATURED_COURSE?.highlight ??
+                    'Move through a guided learning track instead of trying to stitch your own education together from fragments.'}
+                </p>
+                <div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[color:rgba(248,244,238,0.58)]">
+                  <span>{FEATURED_COURSE?.level ?? 'Beginner'}</span>
+                  <span>{FEATURED_COURSE?.duration ?? '4 weeks'}</span>
+                </div>
+                <div className="mt-5 inline-flex items-center text-sm font-semibold text-[color:var(--accent)]">
+                  Browse courses
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </div>
+              </Link>
             </div>
           </div>
         </div>

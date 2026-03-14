@@ -18,6 +18,7 @@ import type {
 
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Learn', path: '/learn', description: 'AI basics, first steps, and practical learning tracks.' },
+  { label: 'Courses', path: '/courses', description: 'Structured learning tracks for beginners, teams, and builders.' },
   { label: 'Use', path: '/use', description: 'Business use cases, workflow ideas, and adoption guidance.' },
   { label: 'Choose', path: '/choose', description: 'Tool comparisons and plain-English buying decisions.' },
   { label: 'Build', path: '/build', description: 'Technical and no-code implementation paths.' },
@@ -634,6 +635,12 @@ export const SERVICE_OFFERS: ServiceOffer[] = [
     deliverables: ['Live workshop', 'Role-specific examples', 'Reusable prompt pack'],
   },
   {
+    title: 'Courses and cohorts',
+    summary: 'Structured learning tracks for individuals, cohorts, and teams who want more depth than a single workshop.',
+    audience: 'Learners, cohort leads, and teams building practical AI capability.',
+    deliverables: ['Course access guidance', 'Recommended track selection', 'Delivery options for individuals or teams'],
+  },
+  {
     title: 'Workflow design and automation',
     summary: 'Turn repeated work into a defined process, then automate the parts worth automating.',
     audience: 'Teams losing time to admin, handoffs, and repetitive coordination.',
@@ -740,6 +747,7 @@ export const FOOTER_LINK_GROUPS: FooterLinkGroup[] = [
     title: 'Explore',
     links: [
       { label: 'Learn', path: '/learn' },
+      { label: 'Courses', path: '/courses' },
       { label: 'Use', path: '/use' },
       { label: 'Choose', path: '/choose' },
       { label: 'Build', path: '/build' },
@@ -750,6 +758,7 @@ export const FOOTER_LINK_GROUPS: FooterLinkGroup[] = [
     links: [
       { label: 'Prompt Library', path: '/prompts' },
       { label: 'AI Readiness Test', path: '/readiness-test' },
+      { label: 'Courses and cohorts', path: '/courses' },
       { label: 'Training and Consulting', path: '/training' },
     ],
   },

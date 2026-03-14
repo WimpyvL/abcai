@@ -85,6 +85,17 @@ export const ADAPTIVE_JOURNEYS: Record<JourneyProfileId, AdaptiveJourney> = {
           { title: 'See practical uses', path: '/use', reason: 'Good when you want to connect concepts to real work.', outcome: 'You will understand where AI actually helps.' },
         ],
       },
+      courses: {
+        stageId: 'learn',
+        summary: 'Courses give the beginner path more structure, repetition, and guided practice than browsing alone.',
+        nextLabel: 'Start with Learn',
+        nextPath: '/learn',
+        recommendations: [
+          { title: 'Reinforce the basics', path: '/learn', reason: 'Use this if you want the plain-language foundation before choosing a course.', outcome: 'You will understand the landscape before committing to a track.' },
+          { title: 'Practice with prompts', path: '/prompts', reason: 'The fastest gains still come from applying what you learn directly.', outcome: 'You will turn course learning into usable output faster.' },
+          { title: 'Choose a starter tool', path: '/choose', reason: 'Once the course path is clearer, tool choice gets easier.', outcome: 'You will avoid buying software too early or for the wrong job.' },
+        ],
+      },
       use: {
         stageId: 'use',
         summary: 'Use AI for real tasks without trusting it blindly or turning simple work into a science project.',
@@ -179,6 +190,17 @@ export const ADAPTIVE_JOURNEYS: Record<JourneyProfileId, AdaptiveJourney> = {
           { title: 'Assess readiness', path: '/readiness-test', reason: 'Good when you want to know whether the team is ready for more.', outcome: 'You will see if the next move is training, pilot work, or pause.' },
         ],
       },
+      courses: {
+        stageId: 'learn',
+        summary: 'Courses are the structured layer for teams and operators who need deeper skill-building before or during rollout.',
+        nextLabel: 'Move into Use',
+        nextPath: '/use',
+        recommendations: [
+          { title: 'Return to workflow use cases', path: '/use', reason: 'Course selection should still stay tied to actual business problems.', outcome: 'You will keep learning connected to operational value.' },
+          { title: 'Assess readiness', path: '/readiness-test', reason: 'Useful when the question is whether the business can absorb broader rollout.', outcome: 'You will see if the next move is training, pilots, or implementation support.' },
+          { title: 'Book course or cohort support', path: '/training', reason: 'Best when you want structured delivery for a team rather than a solo track.', outcome: 'You will turn interest into a realistic training plan.' },
+        ],
+      },
       use: {
         stageId: 'use',
         summary: 'This path starts with repeated work, obvious inefficiencies, and measurable operational wins.',
@@ -271,6 +293,17 @@ export const ADAPTIVE_JOURNEYS: Record<JourneyProfileId, AdaptiveJourney> = {
           { title: 'Return to build patterns', path: '/build', reason: 'Learning should support implementation, not replace it.', outcome: 'You will reconnect fundamentals to the build.' },
           { title: 'Reassess the use case', path: '/use', reason: 'Useful if the tech is racing ahead of the operational problem.', outcome: 'You will ground the system in actual workflow needs.' },
           { title: 'Check readiness', path: '/readiness-test', reason: 'Good when the blockers are organizational rather than technical.', outcome: 'You will know what needs to change around the build.' },
+        ],
+      },
+      courses: {
+        stageId: 'build',
+        summary: 'Builder courses work best when the goal is structured implementation discipline, not generic AI enthusiasm.',
+        nextLabel: 'Return to Build',
+        nextPath: '/build',
+        recommendations: [
+          { title: 'Return to build patterns', path: '/build', reason: 'Use this when the course needs to feed directly into a real system decision.', outcome: 'You will turn the learning back into architecture and scope.' },
+          { title: 'Choose the right stack', path: '/choose', reason: 'Builder learning still needs stack choices grounded in reality.', outcome: 'You will keep the technical path cleaner and more maintainable.' },
+          { title: 'Bring in implementation support', path: '/training', reason: 'Useful when the build is strategically important and the team wants review or delivery help.', outcome: 'You will reduce technical drift before it hardens.' },
         ],
       },
       use: {
