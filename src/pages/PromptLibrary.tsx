@@ -3,8 +3,8 @@ import { motion } from 'motion/react';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight, Check, Copy, Mail, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ContinueJourney, JourneyCompass } from '../components/Journey';
-import { PageQuickNav } from '../components/PageQuickNav';
+import { ContinueJourney } from '../components/Journey';
+import { PageUtilityRail } from '../components/PageUtilityRail';
 import { PROMPTS } from '../constants';
 import { cn } from '../lib/utils';
 
@@ -44,14 +44,16 @@ export const PromptLibrary = () => {
       </Helmet>
 
       <div className="mx-auto max-w-7xl">
-        <JourneyCompass page="prompts" />
-        <PageQuickNav
-          title="Jump to the prompt layer you need"
-          items={[
-            { id: 'prompt-filters', label: 'Search and filters', description: 'Jump to the controls and narrow the library fast.' },
-            { id: 'prompt-results', label: 'Prompt results', description: 'Skip straight to the working prompts.' },
-            { id: 'prompt-packs', label: 'Prompt packs', description: 'Move to the team enablement and packaging section.' },
-          ]}
+        <PageUtilityRail
+          journeyPage="prompts"
+          quickNav={{
+            title: 'Jump to the prompt layer you need',
+            items: [
+              { id: 'prompt-filters', label: 'Search and filters', description: 'Jump to the controls and narrow the library fast.' },
+              { id: 'prompt-results', label: 'Prompt results', description: 'Skip straight to the working prompts.' },
+              { id: 'prompt-packs', label: 'Prompt packs', description: 'Move to the team enablement and packaging section.' },
+            ],
+          }}
         />
 
         <header className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">

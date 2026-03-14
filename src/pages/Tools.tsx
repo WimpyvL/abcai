@@ -3,8 +3,8 @@ import { motion } from 'motion/react';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight, ExternalLink, Search, ShieldCheck, SlidersHorizontal } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ContinueJourney, JourneyCompass } from '../components/Journey';
-import { PageQuickNav } from '../components/PageQuickNav';
+import { ContinueJourney } from '../components/Journey';
+import { PageUtilityRail } from '../components/PageUtilityRail';
 import { COMPARISONS, TOOLS } from '../constants';
 import { cn } from '../lib/utils';
 
@@ -37,14 +37,16 @@ export const Tools = () => {
       </Helmet>
 
       <div className="mx-auto max-w-7xl">
-        <JourneyCompass page="choose" />
-        <PageQuickNav
-          title="Jump through the tool decision flow"
-          items={[
-            { id: 'tool-comparisons', label: 'Head-to-head', description: 'See the fast comparisons for common tool debates.' },
-            { id: 'tool-directory', label: 'Tool directory', description: 'Skip to the searchable list and start filtering.' },
-            { id: 'tool-next-move', label: 'Next move', description: 'Jump to what comes after tool choice.' },
-          ]}
+        <PageUtilityRail
+          journeyPage="choose"
+          quickNav={{
+            title: 'Jump through the tool decision flow',
+            items: [
+              { id: 'tool-comparisons', label: 'Head-to-head', description: 'See the fast comparisons for common tool debates.' },
+              { id: 'tool-directory', label: 'Tool directory', description: 'Skip to the searchable list and start filtering.' },
+              { id: 'tool-next-move', label: 'Next move', description: 'Jump to what comes after tool choice.' },
+            ],
+          }}
         />
 
         <header className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">

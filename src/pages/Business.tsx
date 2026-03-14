@@ -2,9 +2,12 @@ import { motion } from 'motion/react';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight, BriefcaseBusiness, CheckCircle2, ShieldAlert, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ContinueJourney, JourneyCompass } from '../components/Journey';
-import { PageQuickNav } from '../components/PageQuickNav';
+import { ContinueJourney } from '../components/Journey';
+import { PageUtilityRail } from '../components/PageUtilityRail';
 import { IMPLEMENTATION_PHASES, SERVICE_OFFERS, USE_CASES } from '../constants';
+
+const buildTrainingEnquiryPath = (service: string) =>
+  `/training?service=${encodeURIComponent(service)}#enquiry-form`;
 
 export const Business = () => {
   return (
@@ -18,15 +21,17 @@ export const Business = () => {
       </Helmet>
 
       <div className="mx-auto max-w-7xl">
-        <JourneyCompass page="use" />
-        <PageQuickNav
-          title="Jump to the business layer you need"
-          items={[
-            { id: 'business-use-cases', label: 'Use cases', description: 'Go straight to practical examples by industry and workflow.' },
-            { id: 'implementation-sequence', label: 'Implementation sequence', description: 'See the adoption order that avoids expensive nonsense.' },
-            { id: 'business-cautions', label: 'What to be careful about', description: 'Jump to the privacy, review, and ownership risks.' },
-            { id: 'business-support', label: 'When to get help', description: 'See when training, reviews, or support actually make sense.' },
-          ]}
+        <PageUtilityRail
+          journeyPage="use"
+          quickNav={{
+            title: 'Jump to the business layer you need',
+            items: [
+              { id: 'business-use-cases', label: 'Use cases', description: 'Go straight to practical examples by industry and workflow.' },
+              { id: 'implementation-sequence', label: 'Implementation sequence', description: 'See the adoption order that avoids expensive nonsense.' },
+              { id: 'business-cautions', label: 'What to be careful about', description: 'Jump to the privacy, review, and ownership risks.' },
+              { id: 'business-support', label: 'When to get help', description: 'See when training, reviews, or support actually make sense.' },
+            ],
+          }}
         />
 
         <header className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
@@ -182,11 +187,19 @@ export const Business = () => {
             </div>
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               {SERVICE_OFFERS.map((offer) => (
-                <div key={offer.title} className="rounded-2xl border border-[color:var(--line)] p-5">
+                <Link
+                  key={offer.title}
+                  to={buildTrainingEnquiryPath(offer.title)}
+                  className="group rounded-2xl border border-[color:var(--line)] p-5 transition-colors hover:border-[color:var(--accent)] hover:bg-[color:var(--surface)]"
+                >
                   <h3 className="text-lg font-semibold tracking-[-0.03em]">{offer.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-[color:var(--muted)]">{offer.summary}</p>
                   <p className="mt-3 text-sm font-medium text-[color:var(--ink)]/82">{offer.audience}</p>
-                </div>
+                  <div className="mt-4 inline-flex items-center text-sm font-semibold text-[color:var(--accent-strong)]">
+                    Ask about this
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </div>
+                </Link>
               ))}
             </div>
 

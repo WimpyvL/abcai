@@ -1,34 +1,63 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { ArrowRight, Mail, MapPin, Send } from 'lucide-react';
-import { ContinueJourney, JourneyCompass } from '../components/Journey';
-import { PageQuickNav } from '../components/PageQuickNav';
+import { ArrowRight, LoaderCircle, Mail, MapPin, Send } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+import { ContinueJourney } from '../components/Journey';
+import { PageUtilityRail } from '../components/PageUtilityRail';
 import { SERVICE_OFFERS } from '../constants';
+import { submitEnquiry } from '../lib/api';
+import { scrollToSection } from '../lib/scroll';
 
 export const Training = () => {
+  const [searchParams] = useSearchParams();
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [company, setCompany] = React.useState('');
   const [service, setService] = React.useState(SERVICE_OFFERS[0].title);
   const [message, setMessage] = React.useState('');
+  const [submitState, setSubmitState] = React.useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [feedbackMessage, setFeedbackMessage] = React.useState('');
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  React.useEffect(() => {
+    const requestedService = searchParams.get('service');
+
+    if (requestedService && SERVICE_OFFERS.some((offer) => offer.title === requestedService)) {
+      setService(requestedService);
+    }
+  }, [searchParams]);
+
+  const chooseService = (title: string) => {
+    setService(title);
+    setSubmitState('idle');
+    setFeedbackMessage('');
+    scrollToSection('enquiry-form');
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setSubmitState('submitting');
+    setFeedbackMessage('');
 
-    const subject = encodeURIComponent(`ABCAI enquiry: ${service}`);
-    const body = encodeURIComponent(
-      [
-        `Name: ${name}`,
-        `Email: ${email}`,
-        `Company: ${company || 'Not provided'}`,
-        `Service: ${service}`,
-        '',
-        'What we need help with:',
-        message || 'Please contact me to discuss practical AI support.',
-      ].join('\n')
-    );
+    try {
+      await submitEnquiry({
+        name,
+        email,
+        company,
+        service,
+        message,
+        sourcePath: `${window.location.pathname}${window.location.search}${window.location.hash}`,
+      });
 
-    window.location.href = `mailto:hello@abcai.co.za?subject=${subject}&body=${body}`;
+      setName('');
+      setEmail('');
+      setCompany('');
+      setMessage('');
+      setSubmitState('success');
+      setFeedbackMessage("Enquiry received. We'll reply with a practical next step.");
+    } catch (error) {
+      setSubmitState('error');
+      setFeedbackMessage(error instanceof Error ? error.message : 'Something went wrong while sending your enquiry.');
+    }
   };
 
   return (
@@ -42,14 +71,16 @@ export const Training = () => {
       </Helmet>
 
       <div className="mx-auto max-w-7xl">
-        <JourneyCompass page="training" />
-        <PageQuickNav
-          title="Jump to the part that gets you moving"
-          items={[
-            { id: 'service-offers', label: 'Service offers', description: 'See the workshop, review, and implementation options.' },
-            { id: 'engagement-process', label: 'How it works', description: 'Jump to what happens after you get in touch.' },
-            { id: 'enquiry-form', label: 'Start the conversation', description: 'Go straight to the enquiry form and send the brief.' },
-          ]}
+        <PageUtilityRail
+          journeyPage="training"
+          quickNav={{
+            title: 'Jump to the part that gets you moving',
+            items: [
+              { id: 'service-offers', label: 'Service offers', description: 'See the workshop, review, and implementation options.' },
+              { id: 'engagement-process', label: 'How it works', description: 'Jump to what happens after you get in touch.' },
+              { id: 'enquiry-form', label: 'Start the conversation', description: 'Go straight to the enquiry form and send the brief.' },
+            ],
+          }}
         />
 
         <header className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
@@ -97,6 +128,14 @@ export const Training = () => {
                   </div>
                 ))}
               </div>
+              <button
+                type="button"
+                onClick={() => chooseService(offer.title)}
+                className="mt-6 inline-flex items-center text-sm font-semibold text-[color:var(--accent-strong)]"
+              >
+                Ask about this service
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </button>
             </article>
           ))}
         </section>
@@ -205,11 +244,35 @@ export const Training = () => {
 
               <button
                 type="submit"
+                disabled={submitState === 'submitting'}
                 className="inline-flex items-center rounded-full bg-[color:var(--ink)] px-6 py-3.5 text-sm font-semibold text-[color:var(--paper)] hover:bg-[color:var(--accent-strong)]"
               >
-                Send enquiry
-                <ArrowRight className="ml-2 h-4 w-4" />
+                {submitState === 'submitting' ? (
+                  <>
+                    Sending enquiry
+                    <LoaderCircle className="ml-2 h-4 w-4 animate-spin" />
+                  </>
+                ) : (
+                  <>
+                    Send enquiry
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </>
+                )}
               </button>
+
+              {submitState !== 'idle' && (
+                <p
+                  className={`text-sm leading-6 ${
+                    submitState === 'success'
+                      ? 'text-[color:var(--accent-strong)]'
+                      : submitState === 'error'
+                        ? 'text-[#a5442f]'
+                        : 'text-[color:var(--muted)]'
+                  }`}
+                >
+                  {feedbackMessage}
+                </p>
+              )}
             </form>
           </div>
         </section>

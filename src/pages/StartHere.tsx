@@ -2,10 +2,22 @@ import { motion } from 'motion/react';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight, CheckCircle2, Compass, Route, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ContinueJourney, JourneyCompass } from '../components/Journey';
+import { ContinueJourney } from '../components/Journey';
 import { useJourneyProfile } from '../components/JourneyProfile';
-import { PageQuickNav } from '../components/PageQuickNav';
+import { PageUtilityRail } from '../components/PageUtilityRail';
 import { AUDIENCE_PATHS, FEATURED_GUIDES } from '../constants';
+
+const getProfileForPath = (path: string) => {
+  if (path === '/build') {
+    return 'builder';
+  }
+
+  if (path === '/learn' || path === '/prompts') {
+    return 'beginner';
+  }
+
+  return 'business';
+};
 
 export const StartHere = () => {
   const { setProfile } = useJourneyProfile();
@@ -21,15 +33,17 @@ export const StartHere = () => {
       </Helmet>
 
       <div className="mx-auto max-w-7xl">
-        <JourneyCompass page="learn" />
-        <PageQuickNav
-          title="Jump to the right learning layer"
-          items={[
-            { id: 'learning-paths', label: 'Starting paths', description: 'Go straight to the entry path that matches your current goal.' },
-            { id: 'first-week-plan', label: 'First-week plan', description: 'See the clean sequence for your first useful week with AI.' },
-            { id: 'beginner-cautions', label: 'What to avoid', description: 'Skip to the mistakes that catch beginners fastest.' },
-            { id: 'learn-next', label: 'Learn next', description: 'Move into the next resources once the basics are clear.' },
-          ]}
+        <PageUtilityRail
+          journeyPage="learn"
+          quickNav={{
+            title: 'Jump to the right learning layer',
+            items: [
+              { id: 'learning-paths', label: 'Starting paths', description: 'Go straight to the entry path that matches your current goal.' },
+              { id: 'first-week-plan', label: 'First-week plan', description: 'See the clean sequence for your first useful week with AI.' },
+              { id: 'beginner-cautions', label: 'What to avoid', description: 'Skip to the mistakes that catch beginners fastest.' },
+              { id: 'learn-next', label: 'Learn next', description: 'Move into the next resources once the basics are clear.' },
+            ],
+          }}
         />
 
         <header className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
@@ -199,7 +213,12 @@ export const StartHere = () => {
 
           <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {FEATURED_GUIDES.slice(0, 3).map((guide) => (
-              <div key={guide.title} className="rounded-[2rem] border border-[color:var(--line)] bg-white p-6">
+              <Link
+                key={guide.title}
+                to={guide.href}
+                onClick={() => setProfile(getProfileForPath(guide.href))}
+                className="group rounded-[2rem] border border-[color:var(--line)] bg-white p-6 transition-colors hover:border-[color:var(--accent)] hover:bg-[color:var(--surface)]"
+              >
                 <span className="rounded-full bg-[color:var(--accent-soft)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--accent-strong)]">
                   {guide.format}
                 </span>
@@ -213,7 +232,11 @@ export const StartHere = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
+                <div className="mt-6 inline-flex items-center text-sm font-semibold text-[color:var(--accent-strong)]">
+                  Open resource
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </div>
+              </Link>
             ))}
           </div>
         </section>

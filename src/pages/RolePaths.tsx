@@ -2,8 +2,8 @@ import { motion } from 'motion/react';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight, CheckCircle2, Code2, Layers3, Workflow } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ContinueJourney, JourneyCompass } from '../components/Journey';
-import { PageQuickNav } from '../components/PageQuickNav';
+import { ContinueJourney } from '../components/Journey';
+import { PageUtilityRail } from '../components/PageUtilityRail';
 import { BUILD_PRINCIPLES, BUILD_STARTERS, BUILD_TRACKS } from '../constants';
 
 const trackIcons = [Workflow, Code2, Layers3, Workflow];
@@ -20,14 +20,16 @@ export const RolePaths = () => {
       </Helmet>
 
       <div className="mx-auto max-w-7xl">
-        <JourneyCompass page="build" />
-        <PageQuickNav
-          title="Jump through the build path"
-          items={[
-            { id: 'build-tracks', label: 'Build tracks', description: 'See the paths for operators, developers, teams, and founders.' },
-            { id: 'build-principles', label: 'Principles and starters', description: 'Jump to the rules and project ideas worth keeping.' },
-            { id: 'build-support', label: 'Bring in help', description: 'Go to the support section when the build actually matters.' },
-          ]}
+        <PageUtilityRail
+          journeyPage="build"
+          quickNav={{
+            title: 'Jump through the build path',
+            items: [
+              { id: 'build-tracks', label: 'Build tracks', description: 'See the paths for operators, developers, teams, and founders.' },
+              { id: 'build-principles', label: 'Principles and starters', description: 'Jump to the rules and project ideas worth keeping.' },
+              { id: 'build-support', label: 'Bring in help', description: 'Go to the support section when the build actually matters.' },
+            ],
+          }}
         />
 
         <header className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
