@@ -7,6 +7,10 @@ import { ScrollToTop } from './components/ScrollToTop';
 const Home = lazy(() => import('./pages/Home').then((module) => ({ default: module.Home })));
 const StartHere = lazy(() => import('./pages/StartHere').then((module) => ({ default: module.StartHere })));
 const Courses = lazy(() => import('./pages/Courses').then((module) => ({ default: module.Courses })));
+const FoundationsCourse = lazy(() => import('./pages/FoundationsCourse').then((module) => ({ default: module.FoundationsCourse })));
+const FoundationsWorkbook = lazy(() => import('./pages/FoundationsWorkbook').then((module) => ({ default: module.FoundationsWorkbook })));
+const FoundationsCheatSheet = lazy(() => import('./pages/FoundationsCheatSheet').then((module) => ({ default: module.FoundationsCheatSheet })));
+const FoundationsChecklist = lazy(() => import('./pages/FoundationsChecklist').then((module) => ({ default: module.FoundationsChecklist })));
 const CourseDetail = lazy(() => import('./pages/CourseDetail').then((module) => ({ default: module.CourseDetail })));
 const Business = lazy(() => import('./pages/Business').then((module) => ({ default: module.Business })));
 const Tools = lazy(() => import('./pages/Tools').then((module) => ({ default: module.Tools })));
@@ -37,6 +41,10 @@ export default function App() {
                 <Route path="/learn" element={<StartHere />} />
                 <Route path="/start" element={<Navigate to="/learn" replace />} />
                 <Route path="/courses" element={<Courses />} />
+                <Route path="/courses/ai-foundations-for-real-work" element={<FoundationsCourse />} />
+                <Route path="/courses/ai-foundations-for-real-work/workbook" element={<FoundationsWorkbook />} />
+                <Route path="/courses/ai-foundations-for-real-work/cheat-sheet" element={<FoundationsCheatSheet />} />
+                <Route path="/courses/ai-foundations-for-real-work/first-use-checklist" element={<FoundationsChecklist />} />
                 <Route path="/courses/:slug" element={<CourseDetail />} />
                 <Route path="/use" element={<Business />} />
                 <Route path="/business" element={<Navigate to="/use" replace />} />

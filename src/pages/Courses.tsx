@@ -6,7 +6,13 @@ import { Link } from 'react-router-dom';
 import { ContinueJourney } from '../components/Journey';
 import { useJourneyProfile } from '../components/JourneyProfile';
 import { PageUtilityRail } from '../components/PageUtilityRail';
-import { COURSE_DELIVERY_MODELS, COURSES as fallbackCourses, getCourseEnquiryPath, getCourseLessonCount } from '../courseData';
+import {
+  COURSE_DELIVERY_MODELS,
+  COURSES as fallbackCourses,
+  getCourseEnquiryPath,
+  getCourseLessonCount,
+  mergeFetchedCourses,
+} from '../courseData';
 import { fetchCourses } from '../lib/api';
 import type { Course } from '../types';
 
@@ -26,7 +32,7 @@ export const Courses = () => {
     fetchCourses<Course>()
       .then((nextCourses) => {
         if (isMounted && nextCourses.length > 0) {
-          setCourses(nextCourses);
+          setCourses(mergeFetchedCourses(nextCourses));
         }
       })
       .catch(() => {
